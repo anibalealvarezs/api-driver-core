@@ -14,6 +14,13 @@ use Anibalealvarezs\ApiSkeleton\Enums\Channel;
 interface SyncDriverInterface
 {
     /**
+     * Get the common config key for this driver.
+     * 
+     * @return string|null
+     */
+    public static function getCommonConfigKey(): ?string;
+
+    /**
      * Authenticate the driver with a specific provider.
      */
     public function setAuthProvider(AuthProviderInterface $provider): void;
