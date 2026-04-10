@@ -3,6 +3,7 @@
 namespace Anibalealvarezs\ApiDriverCore\Drivers;
 
 use Anibalealvarezs\ApiDriverCore\Interfaces\SyncDriverInterface;
+use Anibalealvarezs\ApiDriverCore\Helpers\Helpers;
 use Exception;
 use Psr\Log\LoggerInterface;
 
@@ -96,7 +97,7 @@ class DriverFactory
         }
 
         // Resilient construction for legacy and modular providers
-        $allConfigs = \Helpers\Helpers::getChannelsConfig();
+        $allConfigs = Helpers::getChannelsConfig();
         $channelConfig = $allConfigs[$channel] ?? [];
         
         // Merge common configurations if specified by the driver
