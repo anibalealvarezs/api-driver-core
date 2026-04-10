@@ -1,0 +1,26 @@
+{
+    "name": "anibalealvarezs/api-driver-core",
+    "description": "Core interfaces and orchestration logic for APIs Hub drivers.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Anibal Alvarez",
+            "email": "aalvarez@chmw.co"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "symfony/http-foundation": "^6.0 || ^7.0",
+        "doctrine/orm": "^2.0 || ^3.0",
+        "doctrine/collections": "^2.0",
+        "nesbot/carbon": "^2.61 || ^3.0",
+        "psr/log": "^1.1 || ^2.0 || ^3.0",
+        "anibalealvarezs/api-client-skeleton": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "Anibalealvarezs\\ApiDriverCore\\": "src/"
+        }
+    }
+}
