@@ -4,6 +4,7 @@ namespace Anibalealvarezs\ApiDriverCore\Interfaces;
 
 use Symfony\Component\HttpFoundation\Response;
 use DateTime;
+use Anibalealvarezs\ApiDriverCore\Interfaces\AuthProviderInterface;
 
 /**
  * Interface SyncDriverInterface
@@ -125,7 +126,7 @@ interface SyncDriverInterface
 
     /**
      * Seed realistic demo data for this driver.
-     *
+     * 
      * @param SeederInterface $seeder The seeder utility (command or service)
      * @param array $config
      * @return void
