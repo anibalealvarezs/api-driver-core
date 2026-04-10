@@ -29,6 +29,13 @@ interface SyncDriverInterface
     public static function storeCredentials(array $credentials): void;
 
     /**
+     * Get the public resources exposed by this driver.
+     * 
+     * @return array
+     */
+    public static function getPublicResources(): array;
+
+    /**
      * Authenticate the driver with a specific provider.
      */
     public function setAuthProvider(AuthProviderInterface $provider): void;
