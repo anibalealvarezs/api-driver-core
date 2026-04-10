@@ -36,6 +36,13 @@ interface SyncDriverInterface
     public static function getPublicResources(): array;
 
     /**
+     * Get the display label for the channel.
+     * 
+     * @return string
+     */
+    public static function getChannelLabel(): string;
+
+    /**
      * Authenticate the driver with a specific provider.
      */
     public function setAuthProvider(AuthProviderInterface $provider): void;
