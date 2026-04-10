@@ -29,7 +29,7 @@ class UniversalEntityConverter
     {
         $collection = new ArrayCollection();
         $channelVal = $config['channel'] ?? 'unknown';
-        $channelEnum = \Anibalealvarezs\ApiDriverCore\Enums\Channel::tryFromName((string) $channelVal);
+        $channelEnum = \Anibalealvarezs\ApiSkeleton\Enums\Channel::tryFromName((string) $channelVal);
         $channel = $channelEnum ? $channelEnum->value : $channelVal;
         $mapping = $config['mapping'] ?? [];
         $platformIdField = $config['platform_id_field'] ?? 'id';
@@ -39,7 +39,7 @@ class UniversalEntityConverter
             // error_log("CELL_DATA: " . json_encode($row));
             $entity = new stdClass();
             $channelVal = $config['channel'] ?? 'unknown';
-            $channelEnum = \Anibalealvarezs\ApiDriverCore\Enums\Channel::tryFromName((string) $channelVal);
+            $channelEnum = \Anibalealvarezs\ApiSkeleton\Enums\Channel::tryFromName((string) $channelVal);
             $entity->channel = $channelEnum ? $channelEnum->value : $channelVal;
             
             // 1. Mandatory Fields

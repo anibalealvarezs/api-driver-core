@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Anibalealvarezs\ApiDriverCore\Classes;
 
 use DateTime;
-use Anibalealvarezs\ApiDriverCore\Enums\Channel;
-use Anibalealvarezs\ApiDriverCore\Enums\Period;
+use Anibalealvarezs\ApiSkeleton\Enums\Channel;
+use Anibalealvarezs\ApiSkeleton\Enums\Period;
 use Anibalealvarezs\ApiSkeleton\Enums\Country as CountryEnum;
 use Anibalealvarezs\ApiSkeleton\Enums\Device as DeviceEnum;
 use InvalidArgumentException;

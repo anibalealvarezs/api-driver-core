@@ -4,6 +4,8 @@ namespace Anibalealvarezs\ApiDriverCore\Interfaces;
 
 use Symfony\Component\HttpFoundation\Response;
 use DateTime;
+use Anibalealvarezs\ApiSkeleton\Interfaces\AuthProviderInterface;
+use Anibalealvarezs\ApiSkeleton\Enums\Channel;
 
 /**
  * Interface SyncDriverInterface
