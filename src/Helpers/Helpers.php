@@ -39,19 +39,31 @@ class Helpers
             return self::$channelsConfig;
         }
 
+        $config = [];
         $configDir = getenv('CONFIG_DIR');
-        if (!$configDir) {
-            return [];
+        if ($configDir) {
+            $filePath = $configDir . '/channels.yaml';
+            if (file_exists($filePath)) {
+                $yamlConfig = Yaml::parseFile($filePath);
+                if (is_array($yamlConfig)) {
+                    $config = $yamlConfig;
+                }
+            }
         }
 
-        $filePath = $configDir . '/channels.yaml';
-        if (file_exists($filePath)) {
-            $config = Yaml::parseFile($filePath);
-            self::$channelsConfig = is_array($config) ? $config : [];
-        } else {
-            self::$channelsConfig = [];
+        if ($envChannelsJson = getenv('CHANNELS_CONFIG')) {
+            $envChannels = json_decode($envChannelsJson, true);
+            if (is_array($envChannels)) {
+                $config = array_replace_recursive($config, $envChannels);
+            }
         }
 
-        return self::$channelsConfig;
+        return self::$channelsConfig = $config;
+    }
+
+    public static function resetConfigs(): void
+    {
+        self::$channelsConfig = null;
+        self::$redisClient = null;
     }
 }
