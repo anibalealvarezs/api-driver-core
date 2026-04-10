@@ -66,4 +66,32 @@ class Helpers
         self::$channelsConfig = null;
         self::$redisClient = null;
     }
+
+    public static function isAssetFiltered(?string $name, array $config, ?string $typeKey = null): bool
+    {
+        if (!$name) {
+            return false;
+        }
+
+        $typeSpecific = $typeKey ? ($config[$typeKey] ?? []) : [];
+        
+        $include = $typeSpecific['cache_include'] ?? $config['cache_include'] ?? null;
+        $exclude = $typeSpecific['cache_exclude'] ?? $config['cache_exclude'] ?? null;
+
+        if ($include) {
+            $matched = (str_contains($name, $include) || (@preg_match($include, "") !== false && preg_match($include, $name)));
+            if (!$matched) {
+                return true; // Filtered out because it's NOT included
+            }
+        }
+
+        if ($exclude) {
+            $matched = (str_contains($name, $exclude) || (@preg_match($exclude, "") !== false && preg_match($exclude, $name)));
+            if ($matched) {
+                return true; // Filtered out because it IS excluded
+            }
+        }
+
+        return false;
+    }
 }
