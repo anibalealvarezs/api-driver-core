@@ -50,6 +50,29 @@ interface SyncDriverInterface
     public static function getRoutes(): array;
 
     /**
+     * Fetch available assets (sites, pages, accounts) from the provider.
+     * 
+     * @return array
+     */
+    public function fetchAvailableAssets(): array;
+
+    /**
+     * Validate the current authentication state.
+     * 
+     * @return array [success => bool, message => string, details => array]
+     */
+    public function validateAuthentication(): array;
+
+    /**
+     * Update/Validate configuration data for this driver.
+     * 
+     * @param array $newData
+     * @param array $currentConfig
+     * @return array The processed configuration to be persisted.
+     */
+    public function updateConfiguration(array $newData, array $currentConfig): array;
+
+    /**
      * Authenticate the driver with a specific provider.
      */
     public function setAuthProvider(AuthProviderInterface $provider): void;
@@ -123,4 +146,31 @@ interface SyncDriverInterface
      * @return array
      */
     public function getAssetPatterns(): array;
+
+    /**
+     * Prepare UI-specific configuration mapping for this channel.
+     *
+     * @param array $channelConfig The raw channel configuration from YAML.
+     * @return array key-value pairs to be injected into the UI state.
+     */
+    public function prepareUiConfig(array $channelConfig): array;
+
+    /**
+     * Initialize channel-specific entities (Pages, Accounts, etc.) in the database.
+     *
+     * @param mixed $entityManager The host's Entity Manager.
+     * @param array $config The channel configuration.
+     * @return array Summary of what was initialized [initialized => int, skipped => int].
+     */
+    public function initializeEntities(mixed $entityManager, array $config = []): array;
+
+    /**
+     * Clear channel-specific data from the database.
+     *
+     * @param mixed $entityManager The host's Entity Manager.
+     * @param string $mode The reset mode: 'entities', 'metrics', or 'all' (default).
+     * @param array $config Optional configuration for the reset.
+     * @return array Summary of what was cleared.
+     */
+    public function reset(mixed $entityManager, string $mode = 'all', array $config = []): array;
 }
