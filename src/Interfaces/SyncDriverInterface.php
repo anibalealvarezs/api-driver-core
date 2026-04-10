@@ -21,6 +21,14 @@ interface SyncDriverInterface
     public static function getCommonConfigKey(): ?string;
 
     /**
+     * Store credentials for this driver.
+     * 
+     * @param array $credentials
+     * @return void
+     */
+    public static function storeCredentials(array $credentials): void;
+
+    /**
      * Authenticate the driver with a specific provider.
      */
     public function setAuthProvider(AuthProviderInterface $provider): void;
