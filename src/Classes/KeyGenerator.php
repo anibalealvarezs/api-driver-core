@@ -79,7 +79,7 @@ class KeyGenerator
             : Channel::tryFromName((string) $channelVal);
 
         if (!$channelEnum) {
-            throw new \InvalidArgumentException("Invalid channel identifier: " . (is_array($channelVal) ? json_encode($channelVal) : (string)$channelVal));
+            throw new InvalidArgumentException("Invalid channel identifier: " . (is_array($channelVal) ? json_encode($channelVal) : (string)$channelVal));
         }
 
         $params = [

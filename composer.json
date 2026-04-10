@@ -16,6 +16,8 @@
     "doctrine/collections": "^2.0",
     "nesbot/carbon": "^2.61 || ^3.0",
     "psr/log": "^1.1 || ^2.0 || ^3.0",
+    "symfony/yaml": "^6.0 || ^7.0",
+    "predis/predis": "^2.0",
     "anibalealvarezs/api-client-skeleton": "dev-main"
   },
   "repositories": [
