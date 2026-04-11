@@ -42,6 +42,13 @@ interface SyncDriverInterface
     public static function getChannelLabel(): string;
 
     /**
+     * Get the display icon for the channel (letter or icon name).
+     * 
+     * @return string
+     */
+    public static function getChannelIcon(): string;
+
+    /**
      * Get the routes served by this driver.
      * 
      * @return array
