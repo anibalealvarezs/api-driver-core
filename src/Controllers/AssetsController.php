@@ -11,6 +11,7 @@ class AssetsController
     {
         $path = $request->attributes->get('path');
         $driverName = $request->attributes->get('driver');
+        error_log("AssetsController::serve - driver: $driverName, path: $path");
 
         // Determine base directory
         if (!$driverName || $driverName === 'core') {
@@ -38,12 +39,26 @@ class AssetsController
             }
 
             $reflection = new \ReflectionClass($driverClass);
-            $baseDir = dirname($reflection->getFileName(), 2) . '/assets';
+            $dir = dirname($reflection->getFileName());
+            $baseDir = null;
+            while ($dir && $dir !== DIRECTORY_SEPARATOR && strlen($dir) > 3) {
+                if (is_dir($dir . DIRECTORY_SEPARATOR . 'assets')) {
+                    $baseDir = $dir . DIRECTORY_SEPARATOR . 'assets';
+                    break;
+                }
+                $dir = dirname($dir);
+            }
+            if (!$baseDir) {
+                return new Response('Assets folder not found for driver', 404);
+            }
         }
 
         $fullPath = realpath($baseDir . '/' . $path);
+        $fileExists = $fullPath && is_file($fullPath);
+        error_log("AssetsController::serve - Base: $baseDir, Path: $path -> Full: $fullPath (Exists: " . ($fileExists ? 'Yes' : 'No') . ")");
 
         if (!$fullPath || !str_starts_with($fullPath, realpath($baseDir)) || !is_file($fullPath)) {
+            error_log("AssetsController::serve - VALIDATION FAILED for $fullPath");
             return new Response('File not found', 404);
         }
 
