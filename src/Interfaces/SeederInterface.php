@@ -102,4 +102,17 @@ interface SeederInterface
         ?string $setHash = null,
         ...$extraParams
     ): void;
+    /**
+     * Get a list of ages for seeding.
+     *
+     * @return string[]
+     */
+    public function getAges(): array;
+
+    /**
+     * Get a list of genders for seeding.
+     *
+     * @return string[]
+     */
+    public function getGenders(): array;
 }
