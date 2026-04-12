@@ -179,4 +179,39 @@ interface SyncDriverInterface
      * @return array Summary of what was cleared.
      */
     public function reset(mixed $entityManager, string $mode = 'all', array $config = []): array;
+
+    /**
+     * Get the supported page types for this driver.
+     *
+     * @return array [type_key => label]
+     */
+    public static function getPageTypes(): array;
+
+    /**
+     * Get the supported account types for this driver.
+     *
+     * @return array [type_key => label]
+     */
+    public static function getAccountTypes(): array;
+
+    /**
+     * Get the entity paths for this driver.
+     *
+     * @return array
+     */
+    /**
+     * Get the entity paths for this driver.
+     *
+     * @return array
+     */
+    public static function getEntityPaths(): array;
+
+    /**
+     * Get the date filter mapping for this driver.
+     * Returns an array like ['start' => 'createdAtMin', 'end' => 'createdAtMax']
+     * or empty array if not supported.
+     *
+     * @return array
+     */
+    public function getDateFilterMapping(): array;
 }

@@ -23,4 +23,28 @@ trait SyncDriverTrait
     {
         return substr(static::getChannelLabel(), 0, 1);
     }
+
+    /**
+     * @return array
+     */
+    public static function getPageTypes(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAccountTypes(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getEntityPaths(): array
+    {
+        return [];
+    }
 }
