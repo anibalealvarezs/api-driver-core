@@ -134,7 +134,9 @@ class DriverFactory
         // Ensure configuration is validated and normalized
         $validatedConfig = $driver->validateConfig($channelConfig);
         if ($authProvider = $driver->getAuthProvider()) {
-            $authProvider->setConfig($validatedConfig);
+            if (method_exists($authProvider, 'setConfig')) {
+                $authProvider->setConfig($validatedConfig);
+            }
         }
 
         $driver->boot();
