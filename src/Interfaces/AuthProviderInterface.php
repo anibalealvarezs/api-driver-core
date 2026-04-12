@@ -34,13 +34,4 @@ interface AuthProviderInterface
      * @param array $credentials
      */
     public function updateCredentials(array $credentials): void;
-    /**
-     * Get the full configuration data for this provider.
-     */
-    public function getConfig(): array;
-
-    /**
-     * Set the configuration data for this provider.
-     */
-    public function setConfig(array $config): void;
 }
