@@ -73,11 +73,11 @@ class DriverFactory
      * @return SyncDriverInterface
      * @throws Exception
      */
-    public static function get(string $channel, ?LoggerInterface $logger = null, ?array $config = null): SyncDriverInterface
+    public static function get(string $channel, ?LoggerInterface $logger = null, array $config = []): SyncDriverInterface
     {
         self::loadRegistry();
 
-        if (isset(self::$instances[$channel]) && $config === null) {
+        if (isset(self::$instances[$channel]) && empty($config)) {
             return self::$instances[$channel];
         }
 
@@ -98,7 +98,7 @@ class DriverFactory
         }
 
         // Resilient construction for legacy and modular providers
-        if ($config === null) {
+        if (empty($config)) {
             $allConfigs = Helpers::getChannelsConfig();
             $channelConfig = $allConfigs[$channel] ?? [];
             
@@ -138,7 +138,7 @@ class DriverFactory
             $driver->setDataProcessor($regConfig['processor']);
         }
 
-        if ($config === null) {
+        if (empty($config)) {
             self::$instances[$channel] = $driver;
         }
 
