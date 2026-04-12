@@ -65,5 +65,15 @@ abstract class BaseAuthProvider implements AuthProviderInterface
         $this->save();
     }
 
+    public function getConfig(): array
+    {
+        return $this->data;
+    }
+
+    public function setConfig(array $config): void
+    {
+        $this->data = $config;
+    }
+
     abstract public function getAccessToken(): string;
 }
