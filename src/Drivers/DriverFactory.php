@@ -69,14 +69,15 @@ class DriverFactory
      *
      * @param string $channel
      * @param LoggerInterface|null $logger
+     * @param array|null $config
      * @return SyncDriverInterface
      * @throws Exception
      */
-    public static function get(string $channel, ?LoggerInterface $logger = null): SyncDriverInterface
+    public static function get(string $channel, ?LoggerInterface $logger = null, ?array $config = null): SyncDriverInterface
     {
         self::loadRegistry();
 
-        if (isset(self::$instances[$channel])) {
+        if (isset(self::$instances[$channel]) && $config === null) {
             return self::$instances[$channel];
         }
 
@@ -84,9 +85,9 @@ class DriverFactory
             throw new Exception("Driver not found for channel: $channel");
         }
 
-        $config = self::$registry[$channel];
-        $driverClass = $config['driver'] ?? null;
-        $authProviderClass = $config['auth'] ?? null;
+        $regConfig = self::$registry[$channel];
+        $driverClass = $regConfig['driver'] ?? null;
+        $authProviderClass = $regConfig['auth'] ?? null;
 
         if (!$driverClass) {
             throw new Exception("Driver class not specified for channel: $channel");
@@ -97,38 +98,49 @@ class DriverFactory
         }
 
         // Resilient construction for legacy and modular providers
-        $allConfigs = Helpers::getChannelsConfig();
-        $channelConfig = $allConfigs[$channel] ?? [];
-        
-        // Merge common configurations if specified by the driver
-        $commonKey = $driverClass::getCommonConfigKey();
-        if ($commonKey && isset($allConfigs[$commonKey])) {
-            $channelConfig = array_merge($allConfigs[$commonKey], $channelConfig);
+        if ($config === null) {
+            $allConfigs = Helpers::getChannelsConfig();
+            $channelConfig = $allConfigs[$channel] ?? [];
+            
+            // Merge common configurations if specified by the driver
+            $commonKey = $driverClass::getCommonConfigKey();
+            if ($commonKey && isset($allConfigs[$commonKey])) {
+                $channelConfig = array_merge($allConfigs[$commonKey], $channelConfig);
+            }
+        } else {
+            $channelConfig = $config;
         }
 
-        $reflection = new \ReflectionClass($authProviderClass);
-        $constructor = $reflection->getConstructor();
-        
-        if ($constructor && isset($constructor->getParameters()[0])) {
-            $firstParam = $constructor->getParameters()[0];
-            $type = $firstParam->getType();
-            if ($type instanceof \ReflectionNamedType && $type->getName() === 'string') {
-                $authProvider = new $authProviderClass($channelConfig['token_path'] ?? "");
+        if ($authProviderClass) {
+            $reflection = new \ReflectionClass($authProviderClass);
+            $constructor = $reflection->getConstructor();
+            
+            if ($constructor && isset($constructor->getParameters()[0])) {
+                $firstParam = $constructor->getParameters()[0];
+                $type = $firstParam->getType();
+                if ($type instanceof \ReflectionNamedType && $type->getName() === 'string') {
+                    $authProvider = new $authProviderClass($channelConfig['token_path'] ?? "");
+                } else {
+                    $authProvider = new $authProviderClass($channelConfig);
+                }
             } else {
                 $authProvider = new $authProviderClass($channelConfig);
             }
+            $driver = new $driverClass($authProvider, $logger);
         } else {
-            $authProvider = new $authProviderClass($channelConfig);
+            $driver = new $driverClass(null, $logger);
         }
-        $driver = new $driverClass($authProvider, $logger);
+        
         $driver->boot();
 
         // Inject data processor if defined and supported by driver
-        if (isset($config['processor']) && method_exists($driver, 'setDataProcessor')) {
-            $driver->setDataProcessor($config['processor']);
+        if (isset($regConfig['processor']) && method_exists($driver, 'setDataProcessor')) {
+            $driver->setDataProcessor($regConfig['processor']);
         }
 
-        self::$instances[$channel] = $driver;
+        if ($config === null) {
+            self::$instances[$channel] = $driver;
+        }
 
         return $driver;
     }
