@@ -128,4 +128,17 @@ trait SyncDriverTrait
     {
         return ['cleared' => 0, 'mode' => $mode];
     }
+
+    /**
+     * @return array
+     */
+    public static function getInstanceRules(): array
+    {
+        return [
+            'history_months' => 6,
+            'entities_sync' => false,
+            'recent_cron_hour' => 10,
+            'recent_cron_minute' => 0,
+        ];
+    }
 }
