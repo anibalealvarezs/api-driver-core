@@ -131,6 +131,12 @@ class DriverFactory
             $driver = new $driverClass(null, $logger);
         }
         
+        // Ensure configuration is validated and normalized
+        $validatedConfig = $driver->validateConfig($channelConfig);
+        if ($authProvider = $driver->getAuthProvider()) {
+            $authProvider->setConfig($validatedConfig);
+        }
+
         $driver->boot();
 
         // Inject data processor if defined and supported by driver
