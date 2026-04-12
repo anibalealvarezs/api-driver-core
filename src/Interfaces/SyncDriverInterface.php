@@ -214,4 +214,12 @@ interface SyncDriverInterface
      * @return array
      */
     public function getDateFilterMapping(): array;
+
+    /**
+     * Get the default dynamic instance generation rules for this driver.
+     * These rules define how many historical quarters, recent syncs, etc. are created.
+     *
+     * @return array [history_months => int, entities_sync => string|bool, recent_cron_hour => int, recent_cron_minute => int]
+     */
+    public static function getInstanceRules(): array;
 }
