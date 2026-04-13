@@ -12,6 +12,11 @@ interface AuthProviderInterface
      * Get a valid access token. Should handle refreshes automatically.
      */
     public function getAccessToken(): string;
+    
+    /**
+     * Get the platform-specific user ID associated with these tokens.
+     */
+    public function getUserId(): string;
 
     /**
      * Check if the current tokens are present and usable.

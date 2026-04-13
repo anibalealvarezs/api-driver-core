@@ -42,11 +42,29 @@ class Helpers
         $config = [];
         $configDir = getenv('CONFIG_DIR');
         if ($configDir) {
+            // 1. Load legacy monolithic channels.yaml if it exists
             $filePath = $configDir . '/channels.yaml';
             if (file_exists($filePath)) {
                 $yamlConfig = Yaml::parseFile($filePath);
                 if (is_array($yamlConfig)) {
                     $config = $yamlConfig;
+                }
+            }
+
+            // 2. Scan modular channels/ directory for .yaml files
+            $channelsDir = $configDir . '/channels';
+            if (is_dir($channelsDir)) {
+                foreach (glob($channelsDir . '/*.yaml') as $file) {
+                    $yamlConfig = Yaml::parseFile($file);
+                    if (is_array($yamlConfig)) {
+                       if (isset($yamlConfig['channels']) && is_array($yamlConfig['channels'])) {
+                           $config = array_replace_recursive($config, $yamlConfig['channels']);
+                       } else {
+                           // Allow files that directly contain the channel configuration (filename used as channel name)
+                           $channelName = pathinfo($file, PATHINFO_FILENAME);
+                           $config = array_replace_recursive($config, [$channelName => $yamlConfig]);
+                       }
+                    }
                 }
             }
         }
