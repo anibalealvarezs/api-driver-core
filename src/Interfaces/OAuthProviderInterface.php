@@ -8,7 +8,7 @@ namespace Anibalealvarezs\ApiDriverCore\Interfaces;
  * Interface OAuthProviderInterface
  * Defines the contract for an OAuth2 Authentication Provider
  */
-interface OAuthProviderInterface
+interface OAuthProviderInterface extends AuthProviderInterface
 {
     /**
      * Get the authorization URL to start the OAuth flow.

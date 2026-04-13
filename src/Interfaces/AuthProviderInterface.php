@@ -12,6 +12,11 @@ interface AuthProviderInterface
      * Get a valid access token. Should handle refreshes automatically.
      */
     public function getAccessToken(): string;
+
+    /**
+     * Set the current access token.
+     */
+    public function setAccessToken(string $token): void;
     
     /**
      * Get the platform-specific user ID associated with these tokens.
@@ -22,6 +27,11 @@ interface AuthProviderInterface
      * Check if the current tokens are present and usable.
      */
     public function isValid(): bool;
+
+    /**
+     * Check if the current tokens are expired.
+     */
+    public function isExpired(): bool;
 
     /**
      * Force a token refresh.

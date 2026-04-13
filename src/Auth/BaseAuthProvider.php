@@ -48,6 +48,11 @@ abstract class BaseAuthProvider implements AuthProviderInterface
         return !empty($this->getAccessToken());
     }
 
+    public function isExpired(): bool
+    {
+        return false;
+    }
+
     public function refresh(): bool
     {
         // Default implementation does nothing, override if needed
@@ -76,5 +81,6 @@ abstract class BaseAuthProvider implements AuthProviderInterface
     }
 
     abstract public function getAccessToken(): string;
+    abstract public function setAccessToken(string $token): void;
     abstract public function getUserId(): string;
 }
