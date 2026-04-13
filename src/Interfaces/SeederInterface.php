@@ -59,7 +59,7 @@ interface SeederInterface
      * @param string $name
      * @param string $date
      * @param float|int $value
-     * @param mixed ...$params Additional parameters (setId, pageId, etc.)
+     * @param mixed ...$extraParams Additional parameters (setId, pageId, etc.)
      * @return void
      */
     public function queueMetric(
