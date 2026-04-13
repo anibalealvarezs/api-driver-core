@@ -130,6 +130,34 @@ trait SyncDriverTrait
     }
 
     /**
+     * @inheritdoc
+     */
+    public function validateConfig(array $config): array
+    {
+        return \Anibalealvarezs\ApiDriverCore\Services\ConfigSchemaRegistryService::hydrate(
+            $this->getChannel(),
+            'global',
+            $config
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getConfigSchema(): array
+    {
+        return [
+            'global' => [
+                'enabled' => false,
+            ],
+            'entity' => [
+                'enabled' => true,
+            ],
+            'metrics' => [],
+        ];
+    }
+
+    /**
      * @return array
      */
     public static function getInstanceRules(): array
