@@ -76,4 +76,5 @@ abstract class BaseAuthProvider implements AuthProviderInterface
     }
 
     abstract public function getAccessToken(): string;
+    abstract public function getUserId(): string;
 }
