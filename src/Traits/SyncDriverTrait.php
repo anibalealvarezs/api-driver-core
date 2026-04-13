@@ -49,9 +49,10 @@ trait SyncDriverTrait
     }
 
     /**
+     * @param bool $throwOnError
      * @return array
      */
-    public function getDateFilterMapping(): array
+    public function fetchAvailableAssets(bool $throwOnError = false): array
     {
         return [];
     }

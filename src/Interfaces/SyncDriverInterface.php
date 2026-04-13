@@ -55,12 +55,13 @@ interface SyncDriverInterface
      */
     public static function getRoutes(): array;
 
-    /**
+     /**
      * Fetch available assets (sites, pages, accounts) from the provider.
      * 
+     * @param bool $throwOnError
      * @return array
      */
-    public function fetchAvailableAssets(): array;
+    public function fetchAvailableAssets(bool $throwOnError = false): array;
 
     /**
      * Validate the current authentication state.
