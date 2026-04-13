@@ -58,6 +58,14 @@ trait SyncDriverTrait
     }
 
     /**
+     * @return array
+     */
+    public function getDateFilterMapping(): array
+    {
+        return [];
+    }
+
+    /**
      * @param array $credentials
      * @return void
      */
