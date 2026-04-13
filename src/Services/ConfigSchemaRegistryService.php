@@ -26,11 +26,14 @@ class ConfigSchemaRegistryService
     /**
      * Hydrates a configuration array with the default schema for a specific channel and section.
      */
-    public static function hydrate(string $channel, string $section, array $currentConfig): array
+    public static function hydrate(string $channel, string $section, array $currentConfig, array $fullSchema = []): array
     {
         try {
-            $driver = DriverFactory::get($channel);
-            $fullSchema = $driver->getConfigSchema();
+            if (empty($fullSchema)) {
+                $driver = DriverFactory::get($channel);
+                $fullSchema = $driver->getConfigSchema();
+            }
+            
             $schema = $fullSchema[$section] ?? [];
             
             if ($section === 'metrics') {
@@ -63,11 +66,13 @@ class ConfigSchemaRegistryService
     /**
      * Get default entity structure for new entity creation.
      */
-    public static function getEntitySchema(string $channel, array $overrides = []): array
+    public static function getEntitySchema(string $channel, array $overrides = [], array $fullSchema = []): array
     {
         try {
-            $driver = DriverFactory::get($channel);
-            $fullSchema = $driver->getConfigSchema();
+            if (empty($fullSchema)) {
+                $driver = DriverFactory::get($channel);
+                $fullSchema = $driver->getConfigSchema();
+            }
             $schema = $fullSchema['entity'] ?? [];
             return array_merge($schema, $overrides);
         } catch (\Exception $e) {
