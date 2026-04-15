@@ -77,7 +77,7 @@ abstract class BaseAuthProvider implements AuthProviderInterface
 
     public function setConfig(array $config): void
     {
-        $this->data = $config;
+        $this->data = array_replace_recursive($this->data, $config);
     }
 
     abstract public function getAccessToken(): string;
