@@ -154,6 +154,16 @@ class UniversalMetricConverter
                         $metric->$key = $val;
                     }
 
+                    // Inject Row Entity Fields (raw platform IDs from API row -> metric properties)
+                    // e.g. ['campaign_id' => 'channeledCampaignPlatformId', 'adset_id' => 'channeledAdGroupPlatformId']
+                    $rowEntityFields = $config['row_entity_fields'] ?? [];
+                    foreach ($rowEntityFields as $rowField => $metricProp) {
+                        $rawId = $row[$rowField] ?? null;
+                        if ($rawId !== null && $rawId !== '') {
+                            $metric->$metricProp = (string)$rawId;
+                        }
+                    }
+
                     $collection->add($metric);
                 }
             }
