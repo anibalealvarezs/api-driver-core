@@ -99,15 +99,60 @@ class UniversalMetricConverter
 
                     $normalizedValue = self::normalizeValue($rawValue);
 
-                    // 5. Generate Metric Configuration Key
+                    // 5a. Extract country/device from row (universal auto-resolution)
+                    // These are read from known field names in the row before key generation.
+                    $rowCountry = $row['country_code'] ?? ($row['country'] ?? ($context['countryCode'] ?? ($context['country'] ?? null)));
+                    $rowDevice  = $row['device_type'] ?? ($row['device'] ?? ($context['deviceType'] ?? ($context['device'] ?? null)));
+
+                    // 5b. Build row_key_fields overrides:
+                    // Maps raw row fields -> KeyGenerator param names AND sets canonical metric properties.
+                    // e.g. ['campaign_id' => 'channeledCampaign', 'adset_id' => 'channeledAdGroup']
+                    // Known canonical property names per keyParam:
+                    //   channeledAccount  → channeledAccountPlatformId
+                    //   channeledCampaign → channeledCampaignPlatformId
+                    //   channeledAdGroup  → channeledAdGroupPlatformId
+                    //   channeledAd       → channeledAdPlatformId
+                    //   creative          → creativePlatformId
+                    //   country           → countryCode
+                    //   device            → deviceType
+                    $keyParamToMetricProp = [
+                        'campaign'          => 'campaignPlatformId',
+                        'channeledAccount'  => 'channeledAccountPlatformId',
+                        'channeledCampaign' => 'channeledCampaignPlatformId',
+                        'channeledAdGroup'  => 'channeledAdGroupPlatformId',
+                        'channeledAd'       => 'channeledAdPlatformId',
+                        'creative'          => 'creativePlatformId',
+                        'country'           => 'countryCode',
+                        'device'            => 'deviceType',
+                        'page'              => 'pagePlatformId',
+                        'post'              => 'postPlatformId',
+                        'product'           => 'productPlatformId',
+                        'customer'          => 'customerPlatformId',
+                        'order'             => 'orderPlatformId',
+                        'account'           => 'accountPlatformId',
+                        'query'             => 'query',
+                    ];
+                    $rowKeyExtras = []; // keyParam name => value from row
+                    foreach ($config['row_key_fields'] ?? [] as $rowField => $targets) {
+                        $rawVal = $row[$rowField] ?? null;
+                        if ($rawVal !== null && $rawVal !== '') {
+                            $targetList = is_array($targets) ? $targets : [$targets];
+                            foreach ($targetList as $keyParamName) {
+                                $rowKeyExtras[$keyParamName] = (string)$rawVal;
+                            }
+                        }
+                    }
+
+                    // 5c. Generate Metric Configuration Key
+                    // Priority: context (static) → row_key_fields → auto country/device
                     $keyParams = array_merge($context, [
-                        'channel' => $channel,
-                        'name' => $systemName,
-                        'period' => $period,
+                        'channel'      => $channel,
+                        'name'         => $systemName,
+                        'period'       => $period,
                         'dimensionSet' => $dimensionsHash,
-                        'country' => $row['country'] ?? ($row['country_code'] ?? null),
-                        'device' => $row['device'] ?? null,
-                    ]);
+                        'country'      => $rowCountry,
+                        'device'       => $rowDevice,
+                    ], $rowKeyExtras);
 
                     $keyParams = array_filter($keyParams, function($v, $k) {
                         return !is_null($v) && in_array($k, [
@@ -122,18 +167,21 @@ class UniversalMetricConverter
 
                     // 6. Build Standardized Metric Object
                     $metric = new stdClass();
-                    $metric->channel = $channel;
-                    $metric->name = $systemName;
-                    $metric->value = $normalizedValue;
-                    $metric->period = $period;
-                    $metric->metricDate = $nDate;
-                    $metric->platformId = (string) ($row[$platformIdField] ?? $config['fallback_platform_id'] ?? 'unknown');
+                    $metric->channel          = $channel;
+                    $metric->name             = $systemName;
+                    $metric->value            = $normalizedValue;
+                    $metric->period           = $period;
+                    $metric->metricDate       = $nDate;
+                    $metric->platformId       = (string) ($row[$platformIdField] ?? $config['fallback_platform_id'] ?? 'unknown');
                     $metric->platformCreatedAt = $nDate;
-                    $metric->dimensions = $dimensions;
-                    $metric->dimensionsHash = $dimensionsHash;
-                    $metric->metricConfigKey = $metricConfigKey;
-                    $metric->data = $row;
-                    $metric->nested_data = $nRow;
+                    $metric->dimensions       = $dimensions;
+                    $metric->dimensionsHash   = $dimensionsHash;
+                    $metric->metricConfigKey  = $metricConfigKey;
+                    $metric->data             = $row;
+                    $metric->nested_data      = $nRow;
+                    // Auto-propagate country/device with canonical property names for MetricsProcessor
+                    $metric->countryCode      = $rowCountry;
+                    $metric->deviceType       = $rowDevice;
 
                     // Metadata filtering (optional)
                     $metadataFields = $config['metadata_fields'] ?? [];
@@ -142,22 +190,29 @@ class UniversalMetricConverter
                     } else {
                         $metric->metadata = [];
                     }
-                    
-                    // Inject Context Values (mostly strings for KeyGenerator reference)
+
+                    // Inject Context Values (static entities / strings for KeyGenerator reference)
                     foreach ($context as $key => $val) {
                         $metric->$key = $val;
                     }
 
-                    // Inject Entities (objects for MetricsProcessor)
+                    // Inject Entities (pre-loaded ORM objects for MetricsProcessor)
                     $entities = $config['entities'] ?? [];
                     foreach ($entities as $key => $val) {
                         $metric->$key = $val;
                     }
 
-                    // Inject Row Entity Fields (raw platform IDs from API row -> metric properties)
-                    // e.g. ['campaign_id' => 'channeledCampaignPlatformId', 'adset_id' => 'channeledAdGroupPlatformId']
-                    $rowEntityFields = $config['row_entity_fields'] ?? [];
-                    foreach ($rowEntityFields as $rowField => $metricProp) {
+                    // Inject Row Key Fields as canonical *PlatformId properties for MetricsProcessor resolution
+                    foreach ($rowKeyExtras as $keyParamName => $rawVal) {
+                        $metricProp = $keyParamToMetricProp[$keyParamName] ?? null;
+                        if ($metricProp) {
+                            $metric->$metricProp = $rawVal;
+                        }
+                    }
+
+                    // Inject Row Entity Fields (legacy / explicit: row field -> metric property name)
+                    // Use this when the canonical *PlatformId property name doesn't match row_key_fields.
+                    foreach ($config['row_entity_fields'] ?? [] as $rowField => $metricProp) {
                         $rawId = $row[$rowField] ?? null;
                         if ($rawId !== null && $rawId !== '') {
                             $metric->$metricProp = (string)$rawId;
