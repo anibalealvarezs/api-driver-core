@@ -35,12 +35,14 @@ class AssetRegistry
 
     /**
      * Generates a canonical ID for an asset based on patterns.
+     * Guaranteed universal consistency across providers and channels.
      */
     public static function getCanonicalId(string $url, string|int|null $platformId = null, string|null $type = null, string|null $hostname = null): string
     {
         $prefix = null;
         $urlIdRegex = null;
 
+        // 1. Resolve asset configuration via Type or Hostname
         if ($type) {
             $assetPattern = self::findByType($type);
             if ($assetPattern) {
@@ -57,6 +59,15 @@ class AssetRegistry
             }
         }
 
+        // 2. Universal Website Normalization (The "Spine")
+        // If it's a website or unknown, we force the 'site:domain' pattern
+        if (!$prefix || in_array($prefix, ['sc', 'site', 'web'])) {
+            $normalizedHost = preg_replace('~^https?://(?:www\.)?~i', '', $url);
+            $normalizedHost = strtolower(explode('/', $normalizedHost)[0]);
+            return "site:domain:" . $normalizedHost;
+        }
+
+        // 3. Platform Asset Normalization
         $normalizedUrl = preg_replace('~^https?://(?:www\.)?~i', '', $url);
         $normalizedUrl = rtrim($normalizedUrl, '/');
         $normalizedUrl = strtolower($normalizedUrl);
