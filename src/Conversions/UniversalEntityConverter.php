@@ -46,7 +46,7 @@ class UniversalEntityConverter
             $entity->platformId = (string) (self::getNestedValue($row, $platformIdField) ?? '');
             
             $rawDate = self::getNestedValue($row, $dateField);
-            $entity->platformCreatedAt = $rawDate ? Carbon::parse($rawDate) : null;
+            $entity->platformCreatedAt = ($rawDate && trim((string)$rawDate) !== '') ? Carbon::parse($rawDate) : null;
 
             // 2. Dynamic Mapping
             foreach ($mapping as $key => $path) {
