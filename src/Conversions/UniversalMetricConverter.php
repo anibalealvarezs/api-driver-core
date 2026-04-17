@@ -74,7 +74,7 @@ class UniversalMetricConverter
 
             // 2. Extract Date
             $rawDate = self::getValueByPath($row, $dateField);
-            $metricDate = $rawDate ? Carbon::parse((string) $rawDate)->toDateString() : Carbon::now()->toDateString();
+            $metricDate = $rawDate ? Carbon::parse((string) $rawDate) : Carbon::now();
 
             // 3. Nested Row Support (e.g. Facebook Organic values array)
             $nestedRows = [$row];
@@ -87,7 +87,7 @@ class UniversalMetricConverter
                 $nDate = $metricDate;
                 if (isset($config['nested_date_field'])) {
                     $rawNDate = self::getValueByPath($nRow, $config['nested_date_field']);
-                    if ($rawNDate) $nDate = Carbon::parse((string) $rawNDate)->toDateString();
+                    if ($rawNDate) $nDate = Carbon::parse((string) $rawNDate);
                 }
 
                 // 4. Process each mapped metric
@@ -171,7 +171,7 @@ class UniversalMetricConverter
                     $metric->name             = $systemName;
                     $metric->value            = $normalizedValue;
                     $metric->period           = $period;
-                    $metric->metricDate       = $nDate;
+                    $metric->metricDate       = $nDate->toDateString();
                     $metric->platformId       = (string) ($row[$platformIdField] ?? $config['fallback_platform_id'] ?? 'unknown');
                     $metric->platformCreatedAt = $nDate;
                     $metric->dimensions       = $dimensions;
