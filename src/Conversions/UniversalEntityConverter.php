@@ -36,8 +36,7 @@ class UniversalEntityConverter
         $dateField = $config['date_field'] ?? 'created_at';
         
         foreach ($rows as $row) {
-            // error_log("CELL_DATA: " . json_encode($row));
-            $entity = new stdClass();
+            $entity = new \Anibalealvarezs\ApiDriverCore\Classes\UniversalEntity($row);
             $channelVal = $config['channel'] ?? 'unknown';
             $channelEnum = \Anibalealvarezs\ApiSkeleton\Enums\Channel::tryFromName((string) $channelVal);
             $entity->channel = $channelEnum ? $channelEnum->value : $channelVal;

@@ -166,7 +166,7 @@ class UniversalMetricConverter
                     $metricConfigKey = KeyGenerator::generateMetricConfigKey(...$keyParams);
 
                     // 6. Build Standardized Metric Object
-                    $metric = new stdClass();
+                    $metric = new \Anibalealvarezs\ApiDriverCore\Classes\UniversalEntity($row);
                     $metric->channel          = $channel;
                     $metric->name             = $systemName;
                     $metric->value            = $normalizedValue;
