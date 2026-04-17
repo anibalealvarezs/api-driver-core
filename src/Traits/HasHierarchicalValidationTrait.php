@@ -22,13 +22,20 @@ trait HasHierarchicalValidationTrait
             return;
         }
 
-        foreach ($collection as $metric) {
-            // Simple validation rules based on channel hierarchy
-            match ($type) {
-                HierarchyType::MARKETING => $this->validateMarketingHierarchy($metric),
-                HierarchyType::PAGE => $this->validatePageHierarchy($metric),
-                HierarchyType::POST => $this->validatePostHierarchy($metric),
-            };
+        foreach ($collection as $key => $metric) {
+            try {
+                // Simple validation rules based on channel hierarchy
+                match ($type) {
+                    HierarchyType::MARKETING => $this->validateMarketingHierarchy($metric),
+                    HierarchyType::PAGE => $this->validatePageHierarchy($metric),
+                    HierarchyType::POST => $this->validatePostHierarchy($metric),
+                };
+            } catch (Exception $e) {
+                if (property_exists($this, 'logger') && $this->logger) {
+                    $this->logger->warning("[Integrity] " . $e->getMessage() . " - Skipping one metric row.");
+                }
+                $collection->remove($key);
+            }
         }
     }
 
