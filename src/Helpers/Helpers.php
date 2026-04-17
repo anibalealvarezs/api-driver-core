@@ -23,12 +23,15 @@ class Helpers
         $port = (int) (getenv('REDIS_PORT') ?: 6379);
         $pass = getenv('REDIS_PASSWORD') ?: null;
 
-        self::$redisClient = new Client([
+        /** @var ClientInterface $redis */
+        $redis = new Client([
             'scheme' => 'tcp',
             'host'   => $host,
             'port'   => $port,
             'password' => $pass,
         ]);
+
+        self::$redisClient = $redis;
 
         return self::$redisClient;
     }
