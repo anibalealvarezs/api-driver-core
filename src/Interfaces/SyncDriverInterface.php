@@ -85,9 +85,22 @@ interface SyncDriverInterface
     public function setAuthProvider(AuthProviderInterface $provider): void;
 
     /**
-     * Perform the synchronization loop for a date range.
+     * Synchronize metrics and entities.
+     *
+     * @param DateTime $startDate
+     * @param DateTime $endDate
+     * @param array $config
+     * @param callable|null $shouldContinue
+     * @param callable|null $identityMapper
+     * @return Response
      */
-    public function sync(DateTime $startDate, DateTime $endDate, array $config = []): Response;
+    public function sync(
+        DateTime $startDate,
+        DateTime $endDate,
+        array $config = [],
+        ?callable $shouldContinue = null,
+        ?callable $identityMapper = null
+    ): Response;
 
     /**
      * Get the channel identifier (e.g. google_search_console).
@@ -163,23 +176,22 @@ interface SyncDriverInterface
     public function prepareUiConfig(array $channelConfig): array;
 
     /**
-     * Initialize channel-specific entities (Pages, Accounts, etc.) in the database.
+     * Initialize channel-specific entity definitions (Pages, Accounts, etc.).
+     * Returns a manifest of required entities to be created/validated by the host.
      *
-     * @param mixed $entityManager The host's Entity Manager.
      * @param array $config The channel configuration.
-     * @return array Summary of what was initialized [initialized => int, skipped => int].
+     * @return array Summary/Manifest of entities.
      */
-    public function initializeEntities(mixed $entityManager, array $config = []): array;
+    public function initializeEntities(array $config = []): array;
 
     /**
-     * Clear channel-specific data from the database.
+     * Clear channel-specific data requests.
      *
-     * @param mixed $entityManager The host's Entity Manager.
      * @param string $mode The reset mode: 'entities', 'metrics', or 'all' (default).
      * @param array $config Optional configuration for the reset.
-     * @return array Summary of what was cleared.
+     * @return array Summary of items to be cleared by the host.
      */
-    public function reset(mixed $entityManager, string $mode = 'all', array $config = []): array;
+    public function reset(string $mode = 'all', array $config = []): array;
 
     /**
      * Get the supported page types for this driver.
