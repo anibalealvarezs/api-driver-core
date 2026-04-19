@@ -110,9 +110,11 @@ interface SeederInterface
     public function getAges(): array;
 
     /**
-     * Get a list of genders for seeding.
+     * Resolve or create an entity for seeding.
      *
-     * @return string[]
+     * @param string $type
+     * @param array $params
+     * @return mixed
      */
-    public function getGenders(): array;
+    public function resolveEntity(string $type, array $params): mixed;
 }
