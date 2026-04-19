@@ -25,6 +25,27 @@ trait SyncDriverTrait
     }
 
     /**
+     * Get the display label for the provider (e.g. Meta, Google).
+     * 
+     * @return string
+     */
+    public static function getProviderLabel(): string
+    {
+        return static::getProviderName();
+    }
+
+    /**
+     * Get the internal name/slug for the provider (e.g. meta, google).
+     * 
+     * @return string
+     */
+    public static function getProviderName(): string
+    {
+        $classParts = explode('\\', static::class);
+        return strtolower($classParts[0]);
+    }
+
+    /**
      * @return array
      */
     public static function getPageTypes(): array

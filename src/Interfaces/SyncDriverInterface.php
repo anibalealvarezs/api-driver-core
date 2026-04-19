@@ -42,6 +42,20 @@ interface SyncDriverInterface
     public static function getChannelLabel(): string;
 
     /**
+     * Get the display label for the provider (e.g. Meta, Google).
+     *
+     * @return string
+     */
+    public static function getProviderLabel(): string;
+
+    /**
+     * Get the internal name/slug for the provider (e.g. meta, google).
+     *
+     * @return string
+     */
+    public static function getProviderName(): string;
+
+    /**
      * Get the display icon for the channel (letter or icon name).
      * 
      * @return string
