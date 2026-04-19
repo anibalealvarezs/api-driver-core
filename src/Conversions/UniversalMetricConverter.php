@@ -251,9 +251,47 @@ class UniversalMetricConverter
     }
 
     /**
-     * Normalizes complex provider values (arrays, strings) into numeric formats.
+     * Returns a standardized context array with all possible keys initialized to null.
+     * This ensures structural consistency across all drivers.
+     *
+     * @param array $overrides
+     * @return array
      */
-    private static function normalizeValue(mixed $value): float|int
+    public static function getUniversalContext(array $overrides = []): array
+    {
+        $template = [
+            'account' => null,
+            'accountPlatformId' => null,
+            'channeledAccount' => null,
+            'channeledAccountId' => null,
+            'channeledAccountPlatformId' => null,
+            'page' => null,
+            'pagePlatformId' => null,
+            'post' => null,
+            'postPlatformId' => null,
+            'campaign' => null,
+            'channeledCampaign' => null,
+            'channeledCampaignPlatformId' => null,
+            'channeledAdGroup' => null,
+            'channeledAdGroupPlatformId' => null,
+            'channeledAd' => null,
+            'channeledAdPlatformId' => null,
+            'creative' => null,
+            'creativePlatformId' => null,
+            'platform_id' => null,
+            'date' => null,
+            'query' => null,
+            'countryCode' => null,
+            'deviceType' => null,
+        ];
+
+        return array_merge($template, $overrides);
+    }
+
+    /**
+     * Normalizes a metric value.
+     */
+    private static function normalizeValue(mixed $value): float|int|null
     {
         if (is_numeric($value)) {
             return $value + 0;
