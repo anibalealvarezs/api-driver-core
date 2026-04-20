@@ -5,6 +5,7 @@ namespace Anibalealvarezs\ApiDriverCore\Interfaces;
 use Symfony\Component\HttpFoundation\Response;
 use DateTime;
 use Anibalealvarezs\ApiDriverCore\Interfaces\AuthProviderInterface;
+use Anibalealvarezs\ApiDriverCore\Interfaces\SeederInterface;
 
 /**
  * Interface SyncDriverInterface
@@ -221,11 +222,6 @@ interface SyncDriverInterface
      */
     public static function getAccountTypes(): array;
 
-    /**
-     * Get the entity paths for this driver.
-     *
-     * @return array
-     */
     /**
      * Get the entity paths for this driver.
      *
