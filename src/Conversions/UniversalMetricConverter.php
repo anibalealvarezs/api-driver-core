@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Anibalealvarezs\ApiDriverCore\Conversions;
 
 use Anibalealvarezs\ApiDriverCore\Classes\KeyGenerator;
-use Anibalealvarezs\ApiSkeleton\Enums\Channel;
 use Anibalealvarezs\ApiSkeleton\Enums\Period;
 use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -38,8 +37,6 @@ class UniversalMetricConverter
         if (!$channel) {
             throw new \InvalidArgumentException("Channel is required for UniversalMetricConverter");
         }
-        $channelEnum = \Anibalealvarezs\ApiSkeleton\Enums\Channel::tryFromName((string) $channel);
-        $channel = $channelEnum ? $channelEnum->value : $channel;
 
         $period = $config['period'] ?? Period::Daily->value;
         $platformIdField = $config['platform_id_field'] ?? 'id';
