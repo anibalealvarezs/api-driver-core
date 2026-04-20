@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Anibalealvarezs\ApiDriverCore\Classes;
 
 use DateTime;
-use Anibalealvarezs\ApiSkeleton\Enums\Channel;
 use Anibalealvarezs\ApiSkeleton\Enums\Period;
 use Anibalealvarezs\ApiSkeleton\Enums\Country as CountryEnum;
 use Anibalealvarezs\ApiSkeleton\Enums\Device as DeviceEnum;
@@ -72,18 +71,11 @@ class KeyGenerator
     ): string {
         $emptyHash = self::generateDimensionsHash([]);
         if ($dimensionSet === $emptyHash) { $dimensionSet = null; }
-
+        
         $channelVal = $channel instanceof \BackedEnum ? $channel->value : $channel;
-        $channelEnum = is_numeric($channelVal) 
-            ? Channel::from((int) $channelVal) 
-            : Channel::tryFromName((string) $channelVal);
-
-        if (!$channelEnum) {
-            throw new InvalidArgumentException("Invalid channel identifier: " . (is_array($channelVal) ? json_encode($channelVal) : (string)$channelVal));
-        }
 
         $params = [
-            'channel' => $channelEnum->getName(),
+            'channel' => (string) $channelVal,
             'name' => $name,
             'period' => $period instanceof \BackedEnum ? $period->value : $period,
             'account' => self::extractString($account, 'getName'),
@@ -196,7 +188,7 @@ class KeyGenerator
         DateTime|string $platformCreatedAt
     ): string {
         return md5(json_encode([
-            'channel' => $channel instanceof Channel ? $channel->getName() : (is_numeric($channel) ? Channel::from((int)$channel)->getName() : $channel),
+            'channel' => (string) ($channel instanceof \BackedEnum ? $channel->value : $channel),
             'platformId' => $platformId,
             'metric_id' => is_object($metric) ? $metric->getId() : $metric,
             'platformCreatedAt' => $platformCreatedAt instanceof DateTime ? $platformCreatedAt->format('Y-m-d') : $platformCreatedAt
