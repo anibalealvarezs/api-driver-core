@@ -28,18 +28,14 @@ class UniversalEntityConverter
     public static function convert(array $rows, array $config, ?LoggerInterface $logger = null): ArrayCollection
     {
         $collection = new ArrayCollection();
-        $channelVal = $config['channel'] ?? 'unknown';
-        $channelEnum = \Anibalealvarezs\ApiSkeleton\Enums\Channel::tryFromName((string) $channelVal);
-        $channel = $channelEnum ? $channelEnum->value : $channelVal;
+        $channel = $config['channel'] ?? 'unknown';
         $mapping = $config['mapping'] ?? [];
         $platformIdField = $config['platform_id_field'] ?? 'id';
         $dateField = $config['date_field'] ?? 'created_at';
         
         foreach ($rows as $row) {
             $entity = new \Anibalealvarezs\ApiDriverCore\Classes\UniversalEntity($row);
-            $channelVal = $config['channel'] ?? 'unknown';
-            $channelEnum = \Anibalealvarezs\ApiSkeleton\Enums\Channel::tryFromName((string) $channelVal);
-            $entity->channel = $channelEnum ? $channelEnum->value : $channelVal;
+            $entity->channel = $config['channel'] ?? 'unknown';
             
             // 1. Mandatory Fields
             $entity->platformId = (string) (self::getNestedValue($row, $platformIdField) ?? '');
