@@ -98,4 +98,9 @@ class UniversalEntity
     {
         return isset($this->context[$name]) || isset($this->data[$name]);
     }
+
+    public function __toString(): string
+    {
+        return (string) ($this->platformId ?? ($this->canonicalId ?? ''));
+    }
 }
