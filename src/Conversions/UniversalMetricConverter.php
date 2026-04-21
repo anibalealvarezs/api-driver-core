@@ -142,7 +142,7 @@ class UniversalMetricConverter
 
                     // 5c. Generate Metric Configuration Key
                     // Priority: context (static) → row_key_fields → auto country/device
-                    $keyParams = array_merge($rowKeyExtras, $context, [
+                    $keyParams = array_merge($rowKeyExtras, array_filter($context, fn($v) => !is_null($v)), [
                         'channel'      => $channel,
                         'name'         => $systemName,
                         'period'       => $period,
