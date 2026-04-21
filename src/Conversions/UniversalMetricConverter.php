@@ -190,7 +190,9 @@ class UniversalMetricConverter
 
                     // Inject Context Values (static entities / strings for KeyGenerator reference)
                     foreach ($context as $key => $val) {
-                        $metric->$key = $val;
+                        if (!is_null($val)) {
+                            $metric->$key = $val;
+                        }
                     }
 
                     // Inject Entities (pre-loaded ORM objects for MetricsProcessor)
