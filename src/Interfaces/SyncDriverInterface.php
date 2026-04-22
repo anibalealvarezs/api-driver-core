@@ -245,4 +245,14 @@ interface SyncDriverInterface
      * @return array [history_months => int, entities_sync => string|bool, recent_cron_hour => int, recent_cron_minute => int]
      */
     public static function getInstanceRules(): array;
+
+    /*
+     *
+     */
+    public static function getPages(array $asset): array;
+
+    /*
+     *
+     */
+    public static function getChanneledAccounts(array $asset): array;
 }
