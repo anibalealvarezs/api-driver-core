@@ -199,4 +199,18 @@ trait SyncDriverTrait
         ];
     }
 
+    /*
+     *
+     */
+    public static function getPages(array $asset): array {
+        return [];
+    }
+
+    /*
+     *
+     */
+    public static function getChanneledAccounts(array $asset): array {
+        return [];
+    }
+
 }
