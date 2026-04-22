@@ -34,7 +34,7 @@ interface ChanneledAccountableInterface
      * @param array $asset
      * @return string
      */
-    public static function getChanneledAccountType(array $asset): string;
+    public static function getChanneledAccountType(): string;
 
     /**
      *
