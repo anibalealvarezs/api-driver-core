@@ -228,7 +228,11 @@ trait SyncDriverTrait
      */
     public static function getPlatformId(array $asset, AssetCategory $category, string $context): string
     {
-        return (string) ($asset['id'] ?? '');
+        $id = (string) ($asset['id'] ?? '');
+        if ($id) {
+            error_log("DEBUG: SyncDriverTrait::getPlatformId - Extracted ID: " . $id . " for category: " . $category->value);
+        }
+        return $id;
     }
 
     /*
