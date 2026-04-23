@@ -13,21 +13,21 @@ interface ChanneledAccountableInterface
      * @param array $asset
      * @return string
      */
-    public static function getChanneledAccountPlatformId(array $asset): string;
+    public static function getChanneledAccountPlatformId(array $asset, ?string $key = null): string;
 
     /**
      *
      * @param array $asset
      * @return string
      */
-    public static function getChanneledAccountPlatformCreatedAt(array $asset): string;
+    public static function getChanneledAccountPlatformCreatedAt(array $asset, ?string $key = null): string;
 
     /**
      *
      * @param array $asset
      * @return string
      */
-    public static function getChanneledAccountName(array $asset): string;
+    public static function getChanneledAccountName(array $asset, ?string $key = null): string;
 
     /**
      *
@@ -41,5 +41,5 @@ interface ChanneledAccountableInterface
      * @param array $asset
      * @return array
      */
-    public static function getChanneledAccountData(array $asset): array;
+    public static function getChanneledAccountData(array $asset, ?string $key = null): array;
 }
