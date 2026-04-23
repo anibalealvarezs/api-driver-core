@@ -45,7 +45,11 @@ trait SyncDriverTrait
     public static function getProviderName(): string
     {
         $classParts = explode('\\', static::class);
-        return strtolower($classParts[0]);
+        $provider = strtolower($classParts[0]);
+        if ($provider === 'anibalealvarezs' && isset($classParts[1])) {
+            return strtolower(str_replace('HubDriver', '', $classParts[1]));
+        }
+        return $provider;
     }
 
     /**
