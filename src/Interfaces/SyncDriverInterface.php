@@ -179,7 +179,7 @@ interface SyncDriverInterface
      *
      * @return array
      */
-    public function getAssetPatterns(): array;
+    public static function getAssetPatterns(): array;
 
     /**
      * Derive a platform-specific ID for an asset based on its functional role.

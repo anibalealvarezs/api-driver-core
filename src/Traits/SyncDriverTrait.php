@@ -236,6 +236,14 @@ trait SyncDriverTrait
     }
 
     /**
+     * @return array
+     */
+    public static function getAssetPatterns(): array
+    {
+        return [];
+    }
+
+    /**
      * @param AssetCategory $category
      * @return string|null
      */
