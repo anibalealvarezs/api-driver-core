@@ -257,4 +257,12 @@ trait SyncDriverTrait
         }
         return null;
     }
+
+    /**
+     * @return array
+     */
+    public function getUpdatableCredentials(): array
+    {
+        return property_exists($this, 'updatableCredentials') ? $this->updatableCredentials : [];
+    }
 }
