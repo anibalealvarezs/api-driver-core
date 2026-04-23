@@ -137,6 +137,13 @@ interface SyncDriverInterface
     public function getAuthProvider(): ?AuthProviderInterface;
 
     /**
+     * Get the environment variable mapping for this driver.
+     * 
+     * @return array [ENV_VAR => config_key]
+     */
+    public static function getEnvMapping(): array;
+
+    /**
      * Get the list of environment variables that are updatable for this driver.
      *
      * @return array

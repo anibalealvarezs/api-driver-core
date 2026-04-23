@@ -272,4 +272,12 @@ trait SyncDriverTrait
     {
         return property_exists($this, 'updatableCredentials') ? $this->updatableCredentials : [];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public static function getEnvMapping(): array
+    {
+        return [];
+    }
 }
