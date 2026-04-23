@@ -2,10 +2,9 @@
 
 namespace Anibalealvarezs\ApiDriverCore\Interfaces;
 
+use Anibalealvarezs\ApiDriverCore\Enums\AssetCategory;
 use Symfony\Component\HttpFoundation\Response;
 use DateTime;
-use Anibalealvarezs\ApiDriverCore\Interfaces\AuthProviderInterface;
-use Anibalealvarezs\ApiDriverCore\Interfaces\SeederInterface;
 
 /**
  * Interface SyncDriverInterface
@@ -186,21 +185,21 @@ interface SyncDriverInterface
      * Derive a platform-specific ID for an asset based on its functional role.
      *
      * @param array $asset
-     * @param \Anibalealvarezs\ApiDriverCore\Enums\AssetCategory $category
+     * @param AssetCategory $category
      * @param string $context The driver-specific pattern key (e.g. 'fb_page', 'gsc_site')
      * @return string
      */
-    public static function getPlatformId(array $asset, \Anibalealvarezs\ApiDriverCore\Enums\AssetCategory $category, string $context): string;
+    public static function getPlatformId(array $asset, AssetCategory $category, string $context): string;
 
     /**
      * Derive a cross-channel canonical ID for an asset.
      *
      * @param array $asset
-     * @param \Anibalealvarezs\ApiDriverCore\Enums\AssetCategory $category
+     * @param AssetCategory $category
      * @param string $context
      * @return string
      */
-    public static function getCanonicalId(array $asset, \Anibalealvarezs\ApiDriverCore\Enums\AssetCategory $category, string $context): string;
+    public static function getCanonicalId(array $asset, AssetCategory $category, string $context): string;
 
     /**
      * Prepare UI-specific configuration mapping for this channel.

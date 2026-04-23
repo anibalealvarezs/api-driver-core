@@ -78,14 +78,10 @@ class AssetRegistry
             }
         }
 
-        if ($platformId && $prefix) {
-            return "{$prefix}:{$platformId}";
+        if ($platformId) {
+            return "$prefix:$platformId";
         }
 
-        if ($prefix) {
-            return "{$prefix}:" . md5($normalizedUrl);
-        }
-
-        return md5($normalizedUrl);
+        return "$prefix:" . md5($normalizedUrl);
     }
 }

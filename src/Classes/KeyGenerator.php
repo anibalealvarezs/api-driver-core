@@ -18,6 +18,11 @@ use InvalidArgumentException;
  */
 class KeyGenerator
 {
+
+    /**
+     * @param object|string $query
+     * @return string
+     */
     public static function generateQueryKey(object|string $query): string
     {
         if (is_object($query) && method_exists($query, 'getQuery')) {

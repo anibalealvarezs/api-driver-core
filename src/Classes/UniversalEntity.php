@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Anibalealvarezs\ApiDriverCore\Classes;
 
+use Carbon\Carbon;
+
 /**
  * UniversalEntity
  * 
@@ -17,7 +19,7 @@ class UniversalEntity
     public ?string $url = null;
     public ?string $hostname = null;
     public ?string $type = null;
-    public ?\Carbon\Carbon $platformCreatedAt = null;
+    public ?Carbon $platformCreatedAt = null;
     public mixed $channel = null;
     public array $data = [];
     private array $context = [];
@@ -54,8 +56,8 @@ class UniversalEntity
     public function getChannel(): mixed { return $this->channel; }
     public function setChannel(mixed $channel): self { $this->channel = $channel; return $this; }
 
-    public function getPlatformCreatedAt(): ?\Carbon\Carbon { return $this->platformCreatedAt; }
-    public function setPlatformCreatedAt(?\Carbon\Carbon $date): self { $this->platformCreatedAt = $date; return $this; }
+    public function getPlatformCreatedAt(): ?Carbon { return $this->platformCreatedAt; }
+    public function setPlatformCreatedAt(?Carbon $date): self { $this->platformCreatedAt = $date; return $this; }
 
     /**
      * @return array
@@ -101,6 +103,6 @@ class UniversalEntity
 
     public function __toString(): string
     {
-        return (string) ($this->platformId ?? ($this->canonicalId ?? ''));
+        return $this->platformId ?? ($this->canonicalId ?? '');
     }
 }

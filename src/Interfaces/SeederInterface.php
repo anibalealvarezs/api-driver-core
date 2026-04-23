@@ -59,6 +59,39 @@ interface SeederInterface
      * @param string $name
      * @param string $date
      * @param float|int $value
+     * @param null $setId
+     * @param null $pageId
+     * @param null $adId
+     * @param null $agId
+     * @param null $cpId
+     * @param null $caId
+     * @param null $gAccId
+     * @param null $gCpId
+     * @param null $postId
+     * @param null $queryId
+     * @param null $countryId
+     * @param null $deviceId
+     * @param null $productId
+     * @param null $customerId
+     * @param null $orderId
+     * @param null $creativeId
+     * @param string|null $accName
+     * @param string|null $caPId
+     * @param string|null $gCpPId
+     * @param string|null $cpPId
+     * @param string|null $agPId
+     * @param string|null $adPId
+     * @param string|null $pageUrl
+     * @param string|null $postPId
+     * @param string|null $queryPId
+     * @param string|null $countryPId
+     * @param string|null $devicePId
+     * @param string|null $productPId
+     * @param string|null $customerPId
+     * @param string|null $orderPId
+     * @param string|null $creativePId
+     * @param string|null $data
+     * @param string|null $setHash
      * @param mixed ...$extraParams Additional parameters (setId, pageId, etc.)
      * @return void
      */

@@ -11,6 +11,7 @@ interface PageableInterface
     /**
      *
      * @param array $asset
+     * @param string|null $key
      * @return string
      */
     public static function getPagePlatformId(array $asset, ?string $key = null): string;
@@ -18,6 +19,7 @@ interface PageableInterface
     /**
      *
      * @param array $asset
+     * @param string|null $key
      * @return string
      */
     public static function getPageCanonicalId(array $asset, ?string $key = null): string;
@@ -25,6 +27,7 @@ interface PageableInterface
     /**
      *
      * @param array $asset
+     * @param string|null $key
      * @return string
      */
     public static function getPageHostname(array $asset, ?string $key = null): string;
@@ -32,6 +35,7 @@ interface PageableInterface
     /**
      *
      * @param array $asset
+     * @param string|null $key
      * @return string
      */
     public static function getPageTitle(array $asset, ?string $key = null): string;
@@ -39,6 +43,7 @@ interface PageableInterface
     /**
      *
      * @param array $asset
+     * @param string|null $key
      * @return string
      */
     public static function getPageUrl(array $asset, ?string $key = null): string;
@@ -46,6 +51,7 @@ interface PageableInterface
     /**
      *
      * @param array $asset
+     * @param string|null $key
      * @return array
      */
     public static function getPageData(array $asset, ?string $key = null): array;

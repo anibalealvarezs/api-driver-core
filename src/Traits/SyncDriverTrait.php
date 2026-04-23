@@ -2,6 +2,9 @@
 
 namespace Anibalealvarezs\ApiDriverCore\Traits;
 
+use Anibalealvarezs\ApiDriverCore\Enums\AssetCategory;
+use Anibalealvarezs\ApiDriverCore\Services\ConfigSchemaRegistryService;
+
 trait SyncDriverTrait
 {
     /**
@@ -158,11 +161,12 @@ trait SyncDriverTrait
     }
 
     /**
-     * @inheritdoc
+     * @param array $config
+     * @return array
      */
     public function validateConfig(array $config): array
     {
-        return \Anibalealvarezs\ApiDriverCore\Services\ConfigSchemaRegistryService::hydrate(
+        return ConfigSchemaRegistryService::hydrate(
             $this->getChannel(),
             'global',
             $config,
@@ -171,7 +175,7 @@ trait SyncDriverTrait
     }
 
     /**
-     * @inheritdoc
+     * @return array
      */
     public function getConfigSchema(): array
     {
@@ -202,7 +206,23 @@ trait SyncDriverTrait
     /*
      *
      */
-    public static function getPlatformId(array $asset, \Anibalealvarezs\ApiDriverCore\Enums\AssetCategory $category, string $context): string
+    public static function getPages(array $asset): array
+    {
+        return [];
+    }
+
+    /*
+     *
+     */
+    public static function getChanneledAccounts(array $asset): array
+    {
+        return [];
+    }
+
+    /*
+     *
+     */
+    public static function getPlatformId(array $asset, AssetCategory $category, string $context): string
     {
         return (string) ($asset['id'] ?? '');
     }
@@ -210,16 +230,16 @@ trait SyncDriverTrait
     /*
      *
      */
-    public static function getCanonicalId(array $asset, \Anibalealvarezs\ApiDriverCore\Enums\AssetCategory $category, string $context): string
+    public static function getCanonicalId(array $asset, AssetCategory $category, string $context): string
     {
         return static::getPlatformId($asset, $category, $context);
     }
 
     /**
-     * @param \Anibalealvarezs\ApiDriverCore\Enums\AssetCategory $category
+     * @param AssetCategory $category
      * @return string|null
      */
-    public static function getContextForCategory(\Anibalealvarezs\ApiDriverCore\Enums\AssetCategory $category): ?string
+    public static function getContextForCategory(AssetCategory $category): ?string
     {
         foreach (static::getAssetPatterns() as $key => $pattern) {
             $categories = (array) ($pattern['category'] ?? []);

@@ -13,6 +13,9 @@ class Helpers
     private static ?ClientInterface $redisClient = null;
     private static ?array $channelsConfig = null;
 
+    /**
+     * @return ClientInterface
+     */
     public static function getRedisClient(): ClientInterface
     {
         if (self::$redisClient !== null) {
@@ -36,6 +39,9 @@ class Helpers
         return self::$redisClient;
     }
 
+    /**
+     * @return array
+     */
     public static function getChannelsConfig(): array
     {
         if (self::$channelsConfig !== null) {
@@ -82,12 +88,21 @@ class Helpers
         return self::$channelsConfig = $config;
     }
 
+    /**
+     * @return void
+     */
     public static function resetConfigs(): void
     {
         self::$channelsConfig = null;
         self::$redisClient = null;
     }
 
+    /**
+     * @param string|null $name
+     * @param array $config
+     * @param string|null $typeKey
+     * @return bool
+     */
     public static function isAssetFiltered(?string $name, array $config, ?string $typeKey = null): bool
     {
         if (!$name) {
