@@ -202,15 +202,31 @@ trait SyncDriverTrait
     /*
      *
      */
-    public static function getPages(array $asset): array {
-        return [];
+    public static function getPlatformId(array $asset, \Anibalealvarezs\ApiDriverCore\Enums\AssetCategory $category, string $context): string
+    {
+        return (string) ($asset['id'] ?? '');
     }
 
     /*
      *
      */
-    public static function getChanneledAccounts(array $asset): array {
-        return [];
+    public static function getCanonicalId(array $asset, \Anibalealvarezs\ApiDriverCore\Enums\AssetCategory $category, string $context): string
+    {
+        return static::getPlatformId($asset, $category, $context);
     }
 
+    /**
+     * @param \Anibalealvarezs\ApiDriverCore\Enums\AssetCategory $category
+     * @return string|null
+     */
+    public static function getContextForCategory(\Anibalealvarezs\ApiDriverCore\Enums\AssetCategory $category): ?string
+    {
+        foreach (static::getAssetPatterns() as $key => $pattern) {
+            $categories = (array) ($pattern['category'] ?? []);
+            if (in_array($category, $categories)) {
+                return $key;
+            }
+        }
+        return null;
+    }
 }
