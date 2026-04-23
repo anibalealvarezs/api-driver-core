@@ -255,8 +255,11 @@ trait SyncDriverTrait
     {
         foreach (static::getAssetPatterns() as $key => $pattern) {
             $categories = (array) ($pattern['category'] ?? []);
-            if (in_array($category, $categories)) {
-                return $key;
+            foreach ($categories as $cat) {
+                $catValue = ($cat instanceof AssetCategory) ? $cat->value : (string)$cat;
+                if ($catValue === $category->value) {
+                    return $key;
+                }
             }
         }
         return null;
