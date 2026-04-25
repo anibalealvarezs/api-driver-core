@@ -98,6 +98,16 @@ class Helpers
     }
 
     /**
+     * @param string $haystack
+     * @param array $needles
+     * @return bool
+     */
+    public static function str_contains_any(string $haystack, array $needles): bool
+    {
+        return array_reduce($needles, fn($a, $n) => $a || str_contains($haystack, $n), false);
+    }
+
+    /**
      * @param string|null $name
      * @param array $config
      * @param string|null $typeKey
