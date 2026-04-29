@@ -131,12 +131,18 @@ class CacheStrategyService
      */
     public static function clearChannel(string $channelKey): void
     {
-        $redis = self::getRedis();
-        $pattern = "agg:{$channelKey}:*";
-        $keys = $redis->keys($pattern);
-        if (!empty($keys)) {
-            $redis->del($keys);
+        $normalized = trim($channelKey);
+        if ($normalized === '') {
+            return;
         }
+
+        $candidates = array_values(array_unique([
+            $normalized,
+            strtolower($normalized),
+        ]));
+
+        $patterns = array_map(static fn(string $candidate): string => "agg:{$candidate}:*", $candidates);
+        self::clearByPatterns($patterns);
     }
 
     /**
@@ -147,11 +153,62 @@ class CacheStrategyService
      */
     public static function clearRecent(string $channelKey): void
     {
+        $normalized = trim($channelKey);
+        if ($normalized === '') {
+            return;
+        }
+
+        $candidates = array_values(array_unique([
+            $normalized,
+            strtolower($normalized),
+        ]));
+
+        $patterns = array_map(static fn(string $candidate): string => "agg:{$candidate}:recent:*", $candidates);
+        self::clearByPatterns($patterns);
+    }
+
+    /**
+     * @param array<int, string> $patterns
+     */
+    private static function clearByPatterns(array $patterns): void
+    {
         $redis = self::getRedis();
-        $pattern = "agg:{$channelKey}:recent:*";
-        $keys = $redis->keys($pattern);
-        if (!empty($keys)) {
-            $redis->del($keys);
+        $allKeys = [];
+
+        foreach ($patterns as $pattern) {
+            $cursor = '0';
+            do {
+                $scanResult = $redis->scan($cursor, ['MATCH' => $pattern, 'COUNT' => 1000]);
+                if (!is_array($scanResult) || count($scanResult) !== 2) {
+                    break;
+                }
+
+                $cursor = (string) $scanResult[0];
+                $keys = (array) ($scanResult[1] ?? []);
+                foreach ($keys as $key) {
+                    if (is_string($key) && $key !== '') {
+                        $allKeys[$key] = true;
+                    }
+                }
+            } while ($cursor !== '0');
+        }
+
+        if ($allKeys === []) {
+            return;
+        }
+
+        self::deleteKeys(array_keys($allKeys));
+    }
+
+    /**
+     * @param array<int, string> $keys
+     */
+    private static function deleteKeys(array $keys): void
+    {
+        $redis = self::getRedis();
+
+        foreach (array_chunk($keys, 500) as $chunk) {
+            $redis->del($chunk);
         }
     }
 
