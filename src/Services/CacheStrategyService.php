@@ -2,10 +2,11 @@
 
 namespace Anibalealvarezs\ApiDriverCore\Services;
 
+use Anibalealvarezs\ApiDriverCore\Drivers\DriverFactory;
+use Anibalealvarezs\ApiDriverCore\Helpers\Helpers;
 use DateTimeImmutable;
 use DateTimeInterface;
-use Anibalealvarezs\ApiDriverCore\Helpers\Helpers;
-use Anibalealvarezs\ApiDriverCore\Drivers\DriverFactory;
+use Exception;
 use Predis\ClientInterface;
 
 class CacheStrategyService
@@ -24,26 +25,55 @@ class CacheStrategyService
 
     /**
      * Determine if an aggregation request should be cached based on channel toggle.
-     * 
+     *
      * @param string $channelKey
      * @return bool
      */
     public static function isCacheable(string $channelKey): bool
     {
+        $normalizedChannel = strtolower(trim($channelKey));
+
         try {
-            $driver = DriverFactory::get($channelKey);
             $allConfigs = Helpers::getChannelsConfig();
-            $config = $allConfigs[$channelKey] ?? [];
-            $config = $driver->validateConfig($config);
-            return (bool) ($config['cache_aggregations'] ?? false);
-        } catch (\Exception $e) {
+            $config = $allConfigs[$channelKey] ?? $allConfigs[$normalizedChannel] ?? [];
+
+            // Case-insensitive fallback in case channel keys differ only by casing.
+            if ($config === []) {
+                foreach ($allConfigs as $key => $candidate) {
+                    if (strtolower((string) $key) === $normalizedChannel) {
+                        $config = $candidate;
+                        break;
+                    }
+                }
+            }
+
+            if (array_key_exists('cache_aggregations', $config)) {
+                return (bool) $config['cache_aggregations'];
+            }
+
+            // Keep driver validation as optional enrichment, not as a hard requirement.
+            $driverConfig = DriverFactory::getChannelConfig($channelKey);
+            if ($driverConfig === [] && $normalizedChannel !== $channelKey) {
+                $driverConfig = DriverFactory::getChannelConfig($normalizedChannel);
+            }
+
+            $parent = $driverConfig['parent'] ?? null;
+            if (is_string($parent) && $parent !== '') {
+                $parentConfig = $allConfigs[$parent] ?? $allConfigs[strtolower($parent)] ?? [];
+                if (array_key_exists('cache_aggregations', $parentConfig)) {
+                    return (bool) $parentConfig['cache_aggregations'];
+                }
+            }
+
+            return false;
+        } catch (Exception $e) {
             return false;
         }
     }
 
     /**
      * Returns 'historical' or 'recent' based on the request's end date.
-     * 
+     *
      * @param DateTimeInterface|string $endDate
      * @return string
      */
@@ -52,15 +82,16 @@ class CacheStrategyService
         try {
             $end = ($endDate instanceof DateTimeInterface) ? $endDate : new DateTimeImmutable($endDate);
             $threshold = new DateTimeImmutable('today ' . self::RECENT_THRESHOLD);
+
             return ($end < $threshold) ? 'historical' : 'recent';
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return 'recent'; // Default to safer/shorter TTL if date parsing fails
         }
     }
 
     /**
      * Get cached aggregation data.
-     * 
+     *
      * @param string $key
      * @param string $type
      * @return array|null
@@ -73,14 +104,16 @@ class CacheStrategyService
             // Sliding window: refresh TTL on access
             $ttl = ($type === 'recent') ? self::TTL_RECENT : self::TTL_HISTORICAL;
             $redis->expire($key, $ttl);
+
             return json_decode($data, true);
         }
+
         return null;
     }
 
     /**
      * Set aggregation data in cache.
-     * 
+     *
      * @param string $key
      * @param array $data
      * @param string $type
@@ -93,7 +126,7 @@ class CacheStrategyService
 
     /**
      * Clear all aggregation cache for a specific channel.
-     * 
+     *
      * @param string $channelKey
      */
     public static function clearChannel(string $channelKey): void
@@ -109,7 +142,7 @@ class CacheStrategyService
     /**
      * Clear only recent aggregation cache for a specific channel.
      * Usually called after a sync job finishes.
-     * 
+     *
      * @param string $channelKey
      */
     public static function clearRecent(string $channelKey): void
@@ -124,7 +157,7 @@ class CacheStrategyService
 
     /**
      * Generate a unique cache key based on parameters and cache type.
-     * 
+     *
      * @param string $channelKey
      * @param array $params
      * @param string $type
@@ -132,8 +165,33 @@ class CacheStrategyService
      */
     public static function generateKey(string $channelKey, array $params, string $type = 'historical'): string
     {
-        ksort($params);
-        $hash = md5(serialize($params));
+        $normalized = self::normalizeForHash($params);
+        $hash = md5(serialize($normalized));
+
         return "agg:{$channelKey}:{$type}:{$hash}";
+    }
+
+    /**
+     * Normalize arrays recursively to produce deterministic cache keys.
+     * Associative arrays are key-sorted; indexed arrays preserve order.
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    private static function normalizeForHash(mixed $value): mixed
+    {
+        if (!is_array($value)) {
+            return $value;
+        }
+
+        $normalized = array_map(function ($item) {
+            return self::normalizeForHash($item);
+        }, $value);
+
+        if (array_keys($normalized) !== range(0, count($normalized) - 1)) {
+            ksort($normalized);
+        }
+
+        return $normalized;
     }
 }
