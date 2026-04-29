@@ -29,6 +29,7 @@ final class MetricAggregationStrategyRegistry
                 ['dimensions.country'],
                 ['dimensions.device'],
                 ['dimensions.country', 'dimensions.device'],
+                ['dimensions.searchAppearance'],
             ],
         ],
     ];
