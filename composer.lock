@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7620f8b40ae94332e73cf52062ccdbf",
+    "content-hash": "edb5440686ef028ff7fc33c50502edf0",
     "packages": [
         {
             "name": "anibalealvarezs/api-client-skeleton",
@@ -12,19 +12,19 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:anibalealvarezs/api-client-skeleton.git",
-                "reference": "0425a0140f5dcc13794ff30a73f25e2c139ed801"
+                "reference": "d599bf46890e31826604fc1e788d475f966aa9f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://satis.anibalalvarez.com/dist/anibalealvarezs/api-client-skeleton/anibalealvarezs-api-client-skeleton-0425a0140f5dcc13794ff30a73f25e2c139ed801-zip-a889f7.zip",
-                "reference": "0425a0140f5dcc13794ff30a73f25e2c139ed801",
-                "shasum": "b8c7d428c4a92fc3e0ed84d6359834d0c9e20b2d"
+                "url": "https://satis.anibalalvarez.com/dist/anibalealvarezs/api-client-skeleton/anibalealvarezs-api-client-skeleton-d599bf46890e31826604fc1e788d475f966aa9f9-zip-5701fe.zip",
+                "reference": "d599bf46890e31826604fc1e788d475f966aa9f9",
+                "shasum": "f150c2a614ceba61754b6044b30a9af95880b597"
             },
             "require": {
                 "anibalealvarezs/oauth-v1": "@dev",
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "^7.0",
-                "php": ">=8.1",
+                "php": ">=8.3",
                 "predis/predis": "^2.0 || ^3.0",
                 "symfony/yaml": "^6.0 || ^7.0"
             },
@@ -68,7 +68,7 @@
             "support": {
                 "issues": "https://github.com/anibalealvarezs/api-client-skeleton/issues"
             },
-            "time": "2026-04-28T01:48:02+00:00"
+            "time": "2026-05-03T13:26:35+00:00"
         },
         {
             "name": "anibalealvarezs/oauth-v1",
@@ -76,16 +76,16 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:anibalealvarezs/oauth-v1.git",
-                "reference": "3deb0aada91cdda04a30d66ae4c27c445be5a031"
+                "reference": "bfb6e971dbf5bf74b86aea6b20b1c15f6d0f4d77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://satis.anibalalvarez.com/dist/anibalealvarezs/oauth-v1/anibalealvarezs-oauth-v1-3deb0aada91cdda04a30d66ae4c27c445be5a031-zip-19691e.zip",
-                "reference": "3deb0aada91cdda04a30d66ae4c27c445be5a031",
-                "shasum": "de9ceea2aa502d1793ec7779dfb6a0681363d71a"
+                "url": "https://satis.anibalalvarez.com/dist/anibalealvarezs/oauth-v1/anibalealvarezs-oauth-v1-bfb6e971dbf5bf74b86aea6b20b1c15f6d0f4d77-zip-5814e9.zip",
+                "reference": "bfb6e971dbf5bf74b86aea6b20b1c15f6d0f4d77",
+                "shasum": "c0a664105668aab0dad014de1fb8b1c871c6d930"
             },
             "require": {
-                "php": ">=8.1"
+                "php": ">=8.3"
             },
             "require-dev": {
                 "doctrine/instantiator": "^1.5",
@@ -127,7 +127,7 @@
             "support": {
                 "issues": "https://github.com/anibalealvarezs/OAuth-v1/issues"
             },
-            "time": "2026-04-28T01:33:56+00:00"
+            "time": "2026-05-03T13:10:46+00:00"
         },
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -1924,16 +1924,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v8.0.8",
+            "version": "v8.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "5b66d385dc58f69652e56f78a4184615e3f2b7f7"
+                "reference": "7113778e2e91f4709cb3194a75dfa9c0d028d94d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/5b66d385dc58f69652e56f78a4184615e3f2b7f7",
-                "reference": "5b66d385dc58f69652e56f78a4184615e3f2b7f7",
+                "url": "https://api.github.com/repos/symfony/console/zipball/7113778e2e91f4709cb3194a75dfa9c0d028d94d",
+                "reference": "7113778e2e91f4709cb3194a75dfa9c0d028d94d",
                 "shasum": ""
             },
             "require": {
@@ -1990,7 +1990,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v8.0.8"
+                "source": "https://github.com/symfony/console/tree/v8.0.9"
             },
             "funding": [
                 {
@@ -2010,7 +2010,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-30T15:14:47+00:00"
+            "time": "2026-04-29T15:02:55+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -2930,16 +2930,16 @@
         },
         {
             "name": "symfony/var-exporter",
-            "version": "v8.0.8",
+            "version": "v8.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "15776bb07a91b089037da89f8832fa41d5fa6ec6"
+                "reference": "24cf67be4dd0926e4413635418682f4fff831412"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/15776bb07a91b089037da89f8832fa41d5fa6ec6",
-                "reference": "15776bb07a91b089037da89f8832fa41d5fa6ec6",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/24cf67be4dd0926e4413635418682f4fff831412",
+                "reference": "24cf67be4dd0926e4413635418682f4fff831412",
                 "shasum": ""
             },
             "require": {
@@ -2986,7 +2986,7 @@
                 "serialize"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-exporter/tree/v8.0.8"
+                "source": "https://github.com/symfony/var-exporter/tree/v8.0.9"
             },
             "funding": [
                 {
@@ -3006,7 +3006,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-30T15:14:47+00:00"
+            "time": "2026-04-18T13:51:42+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -4885,8 +4885,11 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.1"
+        "php": ">=8.3"
     },
     "platform-dev": [],
+    "platform-overrides": {
+        "php": "8.3.0"
+    },
     "plugin-api-version": "2.3.0"
 }
