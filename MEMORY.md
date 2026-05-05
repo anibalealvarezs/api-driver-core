@@ -12,3 +12,5 @@
 - Shared driver foundation for orchestration and normalization helpers.
 - Metric profile templates and the aggregation strategy registry should remain the canonical shared abstraction for drivers and orchestrator-side index planning.
 - Cache strategy improvements should keep channel-config lookup resilient and cache key generation deterministic, including recursive normalization of nested payloads.
+- Shared Phase 2 (aggregation profiles) has started in this package with base artifacts: `Interfaces\AggregationProfileProviderInterface`, `Classes\AggregationProfileNormalizer`, and `Classes\AggregationProfileTemplates`, plus focused unit coverage under `tests/Unit/Classes`.
+- Aggregation profile normalization now canonicalizes filter operator aliases (e.g., `=`, `==`, `!=`, `<>`) into planner-compatible tokens (`eq`, `neq`, `is_null`, `is_not_null`) to avoid false `missing_profile_capability` fallbacks.
