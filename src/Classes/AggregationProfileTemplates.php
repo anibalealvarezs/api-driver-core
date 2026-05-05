@@ -148,6 +148,7 @@ final class AggregationProfileTemplates
                 '*' => 'sum',
                 'position' => 'weighted_by_metric',
             ],
+            'default_filters' => [],
         ]);
     }
 
