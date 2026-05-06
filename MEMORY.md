@@ -17,3 +17,5 @@
 - Canonical metric equivalence Phase A is now in place for read-only aggregation resolution: `Interfaces\CanonicalMetricDictionaryProviderInterface` and `Classes\CanonicalMetricDefinitionRegistry` (including legacy alias normalization like `purchase_roas -> roas_purchase`) with focused unit coverage in `tests/Unit/Classes/CanonicalMetricDefinitionRegistryTest.php`.
 - `CanonicalMetricDefinitionRegistry` now also exposes input-resolution metadata (`canonical`, `legacy_alias`, `deprecation`) so downstream resolvers can keep backward compatibility while flagging ambiguous requests like `actions` as deprecated instead of treating them as canonical.
 - **Aggregation Profiles**: Added support for `default_filters` in `AggregationProfileTemplates`, enabling drivers to specify mandatory platform-specific filters agnostically.
+- **Identity Resolution**: Standardized the `getPlatformEntityIdField()` contract across all drivers to facilitate agnostic identity extraction from channel data.
+
