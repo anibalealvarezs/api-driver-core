@@ -180,7 +180,10 @@ final class CanonicalMetricDefinitionRegistry
         'page_post_engagements' => 'total_interactions',
         'post_comments' => 'comments',
         'post_reach' => 'reach',
+        'post_impressions_unique' => 'reach',
         'post_shares' => 'shares',
+        'post_media_view' => 'views',
+        'post_video_avg_time_watched' => 'ig_reels_avg_watch_time',
         'page_fan_adds' => 'fan_adds',
         'page_fans' => 'follower_count',
     ];
