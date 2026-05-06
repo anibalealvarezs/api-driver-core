@@ -92,9 +92,8 @@
             foreach ($patterns as $pattern) {
                 if (is_array($pattern)) {
                     $row = self::normalizeSimpleList($pattern);
-                    if ($row !== []) {
-                        $normalized[] = $row;
-                    }
+                    // Explicitly allow empty patterns if provided as an empty array
+                    $normalized[] = $row;
                     continue;
                 }
 
@@ -106,6 +105,7 @@
 
             return $normalized !== [] ? $normalized : [['metricDate']];
         }
+
 
         /**
          * @param mixed $contract
