@@ -284,4 +284,12 @@ trait SyncDriverTrait
     {
         return [];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getConfigurationJs(): string
+    {
+        return "";
+    }
 }

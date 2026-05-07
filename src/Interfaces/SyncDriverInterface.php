@@ -281,4 +281,11 @@ interface SyncDriverInterface
      *
      */
     public static function getChanneledAccounts(array $asset): array;
+
+    /**
+     * Get the JavaScript handler for this driver's configuration in the UI.
+     * 
+     * @return string
+     */
+    public function getConfigurationJs(): string;
 }
