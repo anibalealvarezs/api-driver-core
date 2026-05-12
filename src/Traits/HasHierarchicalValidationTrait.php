@@ -50,25 +50,25 @@ trait HasHierarchicalValidationTrait
         
         // Account ID is always mandatory
         if (empty($metric->channeledAccount)) {
-            // throw new Exception("Marketing Integrity Error: Channeled Account identifier is missing.");
+            throw new Exception("Marketing Integrity Error: Channeled Account identifier is missing.");
         }
 
         // Hierarchical chain validation based on granularity level
         if (in_array($level, ['ad', 'ad_group', 'campaign'])) {
             if (empty($metric->channeledCampaign)) {
-                // throw new Exception("Marketing Integrity Error: Campaign identifier is missing for level '$level'.");
+                throw new Exception("Marketing Integrity Error: Campaign identifier is missing for level '$level'.");
             }
         }
 
         if (in_array($level, ['ad', 'ad_group'])) {
             if (empty($metric->channeledAdGroup)) {
-                // throw new Exception("Marketing Integrity Error: Ad Group identifier is missing for level '$level'.");
+                throw new Exception("Marketing Integrity Error: Ad Group identifier is missing for level '$level'.");
             }
         }
 
         if ($level === 'ad') {
             if (empty($metric->channeledAd)) {
-                // throw new Exception("Marketing Integrity Error: Ad identifier is missing for level 'ad'.");
+                throw new Exception("Marketing Integrity Error: Ad identifier is missing for level 'ad'.");
             }
         }
     }
