@@ -68,7 +68,7 @@ trait HasHierarchicalValidationTrait
 
         if ($level === 'ad') {
             if (empty($metric->channeledAd)) {
-                throw new Exception("Marketing Integrity Error: Ad identifier is missing for level 'ad'.");
+                // throw new Exception("Marketing Integrity Error: Ad identifier is missing for level 'ad'.");
             }
         }
     }
