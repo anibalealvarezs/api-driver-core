@@ -1,246 +1,251 @@
 <?php
 
-namespace Anibalealvarezs\ApiDriverCore\Drivers;
+    namespace Anibalealvarezs\ApiDriverCore\Drivers;
 
-use Anibalealvarezs\ApiDriverCore\Interfaces\SyncDriverInterface;
-use Anibalealvarezs\ApiDriverCore\Helpers\Helpers;
-use Exception;
-use Psr\Log\LoggerInterface;
+    use Anibalealvarezs\ApiDriverCore\Interfaces\SyncDriverInterface;
+    use Anibalealvarezs\ApiDriverCore\Helpers\Helpers;
+    use Exception;
+    use Psr\Log\LoggerInterface;
+    use ReflectionClass;
+    use ReflectionException;
 
-class DriverFactory
-{
-    private static array $instances = [];
-
-    /**
-     * Limpia todas las instancias y el registro (útil para testing).
-     */
-    public static function reset(): void
+    class DriverFactory
     {
-        self::$instances = [];
-        self::$registry = [];
-    }
+        private static array $instances = [];
 
-
-    /**
-     * Mapeo de canales a sus respectivas clases de Driver y AuthProvider.
-     */
-    private static array $registry = [];
-
-    /**
-     * Carga el registro de drivers desde el archivo de configuración.
-     */
-    private static function loadRegistry(): void
-    {
-        if (! empty(self::$registry)) {
-            return;
+        /**
+         * Limpia todas las instancias y el registro (útil para testing).
+         */
+        public static function reset(): void
+        {
+            self::$instances = [];
+            self::$registry = [];
         }
 
-        $configDir = getenv('CONFIG_DIR') ?: __DIR__ . '/../../../config';
-        $filePath = $configDir . '/drivers.yaml';
+        /**
+         * Mapeo de canales a sus respectivas clases de Driver y AuthProvider.
+         */
+        private static array $registry = [];
 
-        if (file_exists($filePath)) {
-            $yamlConfig = \Symfony\Component\Yaml\Yaml::parseFile($filePath);
-            if (is_array($yamlConfig)) {
-                self::$registry = $yamlConfig;
+        /**
+         * Carga el registro de drivers desde el archivo de configuración.
+         */
+        private static function loadRegistry(): void
+        {
+            if (!empty(self::$registry)) {
+                return;
+            }
+
+            $configDir = getenv('CONFIG_DIR') ?: __DIR__.'/../../../config';
+            $filePath = $configDir.'/drivers.yaml';
+
+            if (file_exists($filePath)) {
+                $yamlConfig = \Symfony\Component\Yaml\Yaml::parseFile($filePath);
+                if (is_array($yamlConfig)) {
+                    self::$registry = $yamlConfig;
+                }
             }
         }
-    }
 
-    /**
-     * Get the full driver registry.
-     */
-    public static function getRegistry(): array
-    {
-        self::loadRegistry();
-        return self::$registry;
-    }
+        /**
+         * Get the full driver registry.
+         */
+        public static function getRegistry(): array
+        {
+            self::loadRegistry();
 
-    /**
-     * Get registry info for a specific channel.
-     */
-    public static function getChannelConfig(string $channel): array
-    {
-        self::loadRegistry();
-        return self::$registry[$channel] ?? [];
-    }
-
-    /**
-     * Obtiene una instancia del driver para el canal especificado.
-     *
-     * @param string $channel
-     * @param LoggerInterface|null $logger
-     * @param array|null $config
-     * @return SyncDriverInterface
-     * @throws Exception
-     */
-    public static function get(string $channel, ?LoggerInterface $logger = null, array $config = []): SyncDriverInterface
-    {
-        self::loadRegistry();
-
-        if (isset(self::$instances[$channel]) && empty($config)) {
-            return self::$instances[$channel];
+            return self::$registry;
         }
 
-        if (! isset(self::$registry[$channel])) {
-            throw new Exception("Driver not found for channel: $channel");
+        /**
+         * Get registry info for a specific channel.
+         */
+        public static function getChannelConfig(string $channel): array
+        {
+            self::loadRegistry();
+
+            return self::$registry[$channel] ?? [];
         }
 
-        $regConfig = self::$registry[$channel];
-        $driverClass = $regConfig['driver'] ?? null;
-        $authProviderClass = $regConfig['auth'] ?? null;
+        /**
+         * Obtiene una instancia del driver para el canal especificado.
+         *
+         * @param string $channel
+         * @param LoggerInterface|null $logger
+         * @param array $config
+         * @return SyncDriverInterface
+         * @throws ReflectionException
+         * @throws Exception
+         */
+        public static function get(string $channel, ?LoggerInterface $logger = null, array $config = []): SyncDriverInterface
+        {
+            self::loadRegistry();
 
-        if (!$driverClass) {
-            throw new Exception("Driver class not specified for channel: $channel");
-        }
-
-        if (! class_exists($driverClass)) {
-            throw new Exception("Driver class not found: $driverClass");
-        }
-
-        // Resilient construction for legacy and modular providers
-        if (empty($config)) {
-            $allConfigs = Helpers::getChannelsConfig();
-            $channelConfig = $allConfigs[$channel] ?? [];
-            
-            // Merge common configurations if specified by the driver
-            $commonKey = $driverClass::getCommonConfigKey();
-            if ($commonKey && isset($allConfigs[$commonKey])) {
-                $channelConfig = array_merge($allConfigs[$commonKey], $channelConfig);
+            if (isset(self::$instances[$channel]) && empty($config)) {
+                return self::$instances[$channel];
             }
-        } else {
-            $channelConfig = $config;
-        }
 
-        if ($authProviderClass) {
-            $reflection = new \ReflectionClass($authProviderClass);
-            $constructor = $reflection->getConstructor();
-            
-            if ($constructor && isset($constructor->getParameters()[0])) {
-                $firstParam = $constructor->getParameters()[0];
-                $type = $firstParam->getType();
-                if ($type instanceof \ReflectionNamedType && $type->getName() === 'string') {
-                    $authProvider = new $authProviderClass($channelConfig['token_path'] ?? "");
+            if (!isset(self::$registry[$channel])) {
+                throw new Exception("Driver not found for channel: $channel");
+            }
+
+            $regConfig = self::$registry[$channel];
+            $driverClass = $regConfig['driver'] ?? null;
+            $authProviderClass = $regConfig['auth'] ?? null;
+
+            if (!$driverClass) {
+                throw new Exception("Driver class not specified for channel: $channel");
+            }
+
+            if (!class_exists($driverClass)) {
+                throw new Exception("Driver class not found: $driverClass");
+            }
+
+            // Resilient construction for legacy and modular providers
+            if (empty($config)) {
+                $allConfigs = Helpers::getChannelsConfig();
+                $channelConfig = $allConfigs[$channel] ?? [];
+
+                // Merge common configurations if specified by the driver
+                $commonKey = $driverClass::getCommonConfigKey();
+                if ($commonKey && isset($allConfigs[$commonKey])) {
+                    $channelConfig = array_merge($allConfigs[$commonKey], $channelConfig);
+                }
+            } else {
+                $channelConfig = $config;
+            }
+
+            if ($authProviderClass) {
+                $reflection = new ReflectionClass($authProviderClass);
+                $constructor = $reflection->getConstructor();
+
+                if ($constructor && isset($constructor->getParameters()[0])) {
+                    $firstParam = $constructor->getParameters()[0];
+                    $type = $firstParam->getType();
+                    if ($type instanceof \ReflectionNamedType && $type->getName() === 'string') {
+                        $authProvider = new $authProviderClass($channelConfig['token_path'] ?? "");
+                    } else {
+                        $authProvider = new $authProviderClass($channelConfig);
+                    }
                 } else {
                     $authProvider = new $authProviderClass($channelConfig);
                 }
+                $driver = new $driverClass($authProvider, $logger);
             } else {
-                $authProvider = new $authProviderClass($channelConfig);
+                $driver = new $driverClass(null, $logger);
             }
-            $driver = new $driverClass($authProvider, $logger);
-        } else {
-            $driver = new $driverClass(null, $logger);
-        }
-        
-        // Ensure configuration is validated and normalized
-        $validatedConfig = $driver->validateConfig($channelConfig);
-        if ($authProvider = $driver->getAuthProvider()) {
-            if (method_exists($authProvider, 'setConfig')) {
-                $authProvider->setConfig($validatedConfig);
+
+            // Ensure configuration is validated and normalized
+            $validatedConfig = $driver->validateConfig($channelConfig);
+            if ($authProvider = $driver->getAuthProvider()) {
+                if (method_exists($authProvider, 'setConfig')) {
+                    $authProvider->setConfig($validatedConfig);
+                }
             }
-        }
 
-        $driver->boot();
+            $driver->boot();
 
-        // Inject data processor if defined and supported by driver
-        if (isset($regConfig['processor']) && method_exists($driver, 'setDataProcessor')) {
-            $driver->setDataProcessor($regConfig['processor']);
-        }
-
-        if (empty($config)) {
-            self::$instances[$channel] = $driver;
-        }
-
-        return $driver;
-    }
-
-    /**
-     * Registra manualmente un nuevo driver (útil para extensiones externas).
-     *
-     * @param string $channel
-     * @param string $driverClass
-     * @param string $authClass
-     */
-    public static function register(string $channel, string $driverClass, string $authClass): void
-    {
-        self::loadRegistry();
-
-        self::$registry[$channel] = [
-            'driver' => $driverClass,
-            'auth' => $authClass,
-        ];
-    }
-
-    /**
-     * Fuerza una instancia para un canal (útil para testing).
-     *
-     * @param string $channel
-     * @param SyncDriverInterface $instance
-     */
-    public static function setInstance(string $channel, SyncDriverInterface $instance): void
-    {
-        self::$instances[$channel] = $instance;
-    }
-
-    /**
-     * Obtiene la lista de canales que tienen un driver registrado.
-     *
-     * @return string[]
-     */
-    public static function getAvailableChannels(): array
-    {
-        self::loadRegistry();
-        return array_filter(array_keys(self::$registry), function($channel) {
-            return isset(self::$registry[$channel]['driver']);
-        });
-    }
-
-    /**
-     * Verifica si un canal soporta una entidad específica.
-     *
-     * @param string $channel
-     * @param string $entity
-     * @return bool
-     */
-    public static function supportsEntity(string $channel, string $entity): bool
-    {
-        self::loadRegistry();
-
-        if (! isset(self::$registry[$channel])) {
-            return false;
-        }
-
-        $supportedEntities = self::$registry[$channel]['entities'] ?? [];
-        
-        // Match both 'metric' and 'metrics', 'order' and 'orders', etc.
-        $entity = strtolower($entity);
-        $pluralEntity = $entity . 's';
-        if (!str_ends_with($entity, 's')) {
-             $pluralEntity = $entity . 's';
-        } else {
-             $pluralEntity = $entity;
-             $entity = substr($entity, 0, -1);
-        }
-
-        return in_array($entity, $supportedEntities) || in_array($pluralEntity, $supportedEntities);
-    }
-
-    /**
-     * Obtiene los canales que soportan una entidad.
-     *
-     * @param string $entity
-     * @return string[]
-     */
-    public static function getAvailableChannelsForEntity(string $entity): array
-    {
-        self::loadRegistry();
-        $channels = [];
-
-        foreach (self::$registry as $channel => $config) {
-            if (self::supportsEntity($channel, $entity)) {
-                $channels[] = $channel;
+            // Inject data processor if defined and supported by driver
+            if (isset($regConfig['processor']) && method_exists($driver, 'setDataProcessor')) {
+                $driver->setDataProcessor($regConfig['processor']);
             }
+
+            if (empty($config)) {
+                self::$instances[$channel] = $driver;
+            }
+
+            return $driver;
         }
 
-        return $channels;
+        /**
+         * Registra manualmente un nuevo driver (útil para extensiones externas).
+         *
+         * @param string $channel
+         * @param string $driverClass
+         * @param string $authClass
+         */
+        public static function register(string $channel, string $driverClass, string $authClass): void
+        {
+            self::loadRegistry();
+
+            self::$registry[$channel] = [
+                'driver' => $driverClass,
+                'auth'   => $authClass,
+            ];
+        }
+
+        /**
+         * Fuerza una instancia para un canal (útil para testing).
+         *
+         * @param string $channel
+         * @param SyncDriverInterface $instance
+         */
+        public static function setInstance(string $channel, SyncDriverInterface $instance): void
+        {
+            self::$instances[$channel] = $instance;
+        }
+
+        /**
+         * Obtiene la lista de canales que tienen un driver registrado.
+         *
+         * @return string[]
+         */
+        public static function getAvailableChannels(): array
+        {
+            self::loadRegistry();
+
+            return array_filter(array_keys(self::$registry), function ($channel) {
+                return isset(self::$registry[$channel]['driver']);
+            });
+        }
+
+        /**
+         * Verifica si un canal soporta una entidad específica.
+         *
+         * @param string $channel
+         * @param string $entity
+         * @return bool
+         */
+        public static function supportsEntity(string $channel, string $entity): bool
+        {
+            self::loadRegistry();
+
+            if (!isset(self::$registry[$channel])) {
+                return false;
+            }
+
+            $supportedEntities = self::$registry[$channel]['entities'] ?? [];
+
+            // Match both 'metric' and 'metrics', 'order' and 'orders', etc.
+            $entity = strtolower($entity);
+            $pluralEntity = $entity.'s';
+            if (!str_ends_with($entity, 's')) {
+                $pluralEntity = $entity.'s';
+            } else {
+                $pluralEntity = $entity;
+                $entity = substr($entity, 0, -1);
+            }
+
+            return in_array($entity, $supportedEntities) || in_array($pluralEntity, $supportedEntities);
+        }
+
+        /**
+         * Obtiene los canales que soportan una entidad.
+         *
+         * @param string $entity
+         * @return string[]
+         */
+        public static function getAvailableChannelsForEntity(string $entity): array
+        {
+            self::loadRegistry();
+            $channels = [];
+
+            foreach (self::$registry as $channel => $config) {
+                if (self::supportsEntity($channel, $entity)) {
+                    $channels[] = $channel;
+                }
+            }
+
+            return $channels;
+        }
     }
-}
