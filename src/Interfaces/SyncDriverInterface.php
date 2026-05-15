@@ -69,6 +69,13 @@ interface SyncDriverInterface
      */
     public static function getRoutes(): array;
 
+    /**
+     * Get the routes that should be whitelisted from rate limiting.
+     *
+     * @return array
+     */
+    public static function getRateLimitWhitelist(): array;
+
      /**
      * Fetch available assets (sites, pages, accounts) from the provider.
      * 
