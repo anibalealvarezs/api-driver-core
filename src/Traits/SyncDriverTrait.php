@@ -3,6 +3,7 @@
     namespace Anibalealvarezs\ApiDriverCore\Traits;
 
     use Anibalealvarezs\ApiDriverCore\Enums\AssetCategory;
+    use Anibalealvarezs\ApiDriverCore\Enums\InstanceTier;
     use Anibalealvarezs\ApiDriverCore\Services\ConfigSchemaRegistryService;
 
     trait SyncDriverTrait
@@ -307,10 +308,10 @@
         }
 
         /**
-         * @return int
+         * @return InstanceTier
          */
-        public function getRequiredWorkerTier(): int
+        public function getRequiredInstanceTier(): InstanceTier
         {
-            return 1;
+            return InstanceTier::BASIC;
         }
     }
