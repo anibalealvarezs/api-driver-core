@@ -295,4 +295,11 @@ interface SyncDriverInterface
      * @return string
      */
     public function getConfigurationJs(): string;
+
+    /**
+     * Get the required worker tier for this driver.
+     *
+     * @return int
+     */
+    public function getRequiredWorkerTier(): int;
 }

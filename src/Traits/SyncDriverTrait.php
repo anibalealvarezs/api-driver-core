@@ -305,4 +305,12 @@
         {
             return [];
         }
+
+        /**
+         * @return int
+         */
+        public function getRequiredWorkerTier(): int
+        {
+            return 1;
+        }
     }
