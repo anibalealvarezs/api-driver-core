@@ -1,298 +1,306 @@
 <?php
 
-namespace Anibalealvarezs\ApiDriverCore\Interfaces;
+    namespace Anibalealvarezs\ApiDriverCore\Interfaces;
 
-use Anibalealvarezs\ApiDriverCore\Enums\AssetCategory;
-use Symfony\Component\HttpFoundation\Response;
-use DateTime;
-
-/**
- * Interface SyncDriverInterface
- * Defines the contract for a Data Channel Driver
- */
-interface SyncDriverInterface
-{
-    /**
-     * Get the common config key for this driver.
-     * 
-     * @return string|null
-     */
-    public static function getCommonConfigKey(): ?string;
+    use Anibalealvarezs\ApiDriverCore\Enums\AssetCategory;
+    use Anibalealvarezs\ApiDriverCore\Enums\InstanceTier;
+    use Symfony\Component\HttpFoundation\Response;
+    use DateTime;
 
     /**
-     * Store credentials for this driver.
-     * 
-     * @param array $credentials
-     * @return void
+     * Interface SyncDriverInterface
+     * Defines the contract for a Data Channel Driver
      */
-    public static function storeCredentials(array $credentials): void;
+    interface SyncDriverInterface
+    {
+        /**
+         * Get the common config key for this driver.
+         *
+         * @return string|null
+         */
+        public static function getCommonConfigKey(): ?string;
 
-    /**
-     * Get the public resources exposed by this driver.
-     * 
-     * @return array
-     */
-    public static function getPublicResources(): array;
+        /**
+         * Store credentials for this driver.
+         *
+         * @param array $credentials
+         * @return void
+         */
+        public static function storeCredentials(array $credentials): void;
 
-    /**
-     * Get the display label for the channel.
-     * 
-     * @return string
-     */
-    public static function getChannelLabel(): string;
+        /**
+         * Get the public resources exposed by this driver.
+         *
+         * @return array
+         */
+        public static function getPublicResources(): array;
 
-    /**
-     * Get the display label for the provider (e.g. Meta, Google).
-     *
-     * @return string
-     */
-    public static function getProviderLabel(): string;
+        /**
+         * Get the display label for the channel.
+         *
+         * @return string
+         */
+        public static function getChannelLabel(): string;
 
-    /**
-     * Get the internal name/slug for the provider (e.g. meta, google).
-     *
-     * @return string
-     */
-    public static function getProviderName(): string;
+        /**
+         * Get the display label for the provider (e.g. Meta, Google).
+         *
+         * @return string
+         */
+        public static function getProviderLabel(): string;
 
-    /**
-     * Get the display icon for the channel (letter or icon name).
-     * 
-     * @return string
-     */
-    public static function getChannelIcon(): string;
+        /**
+         * Get the internal name/slug for the provider (e.g. meta, google).
+         *
+         * @return string
+         */
+        public static function getProviderName(): string;
 
-    /**
-     * Get the routes served by this driver.
-     * 
-     * @return array
-     */
-    public static function getRoutes(): array;
+        /**
+         * Get the display icon for the channel (letter or icon name).
+         *
+         * @return string
+         */
+        public static function getChannelIcon(): string;
 
-    /**
-     * Get the routes that should be whitelisted from rate limiting.
-     *
-     * @return array
-     */
-    public static function getRateLimitWhitelist(): array;
+        /**
+         * Get the routes served by this driver.
+         *
+         * @return array
+         */
+        public static function getRoutes(): array;
 
-     /**
-     * Fetch available assets (sites, pages, accounts) from the provider.
-     * 
-     * @param bool $throwOnError
-     * @return array
-     */
-    public function fetchAvailableAssets(bool $throwOnError = false): array;
+        /**
+         * Get the routes that should be whitelisted from rate limiting.
+         *
+         * @return array
+         */
+        public static function getRateLimitWhitelist(): array;
 
-    /**
-     * Validate the current authentication state.
-     * 
-     * @return array [success => bool, message => string, details => array]
-     */
-    public function validateAuthentication(): array;
+        /**
+         * Fetch available assets (sites, pages, accounts) from the provider.
+         *
+         * @param bool $throwOnError
+         * @return array
+         */
+        public function fetchAvailableAssets(bool $throwOnError = false): array;
 
-    /**
-     * Update/Validate configuration data for this driver.
-     * 
-     * @param array $newData
-     * @param array $currentConfig
-     * @return array The processed configuration to be persisted.
-     */
-    public function updateConfiguration(array $newData, array $currentConfig): array;
+        /**
+         * Validate the current authentication state.
+         *
+         * @return array [success => bool, message => string, details => array]
+         */
+        public function validateAuthentication(): array;
 
-    /**
-     * Authenticate the driver with a specific provider.
-     */
-    public function setAuthProvider(AuthProviderInterface $provider): void;
+        /**
+         * Update/Validate configuration data for this driver.
+         *
+         * @param array $newData
+         * @param array $currentConfig
+         * @return array The processed configuration to be persisted.
+         */
+        public function updateConfiguration(array $newData, array $currentConfig): array;
 
-    /**
-     * Synchronize metrics and entities.
-     *
-     * @param DateTime $startDate
-     * @param DateTime $endDate
-     * @param array $config
-     * @param callable|null $shouldContinue
-     * @param callable|null $identityMapper
-     * @return Response
-     */
-    public function sync(
-        DateTime $startDate,
-        DateTime $endDate,
-        array $config = [],
-        ?callable $shouldContinue = null,
-        ?callable $identityMapper = null
-    ): Response;
+        /**
+         * Authenticate the driver with a specific provider.
+         */
+        public function setAuthProvider(AuthProviderInterface $provider): void;
 
-    /**
-     * Get the channel identifier (e.g. google_search_console).
-     */
-    public function getChannel(): string;
+        /**
+         * Synchronize metrics and entities.
+         *
+         * @param DateTime $startDate
+         * @param DateTime $endDate
+         * @param array $config
+         * @param callable|null $shouldContinue
+         * @param callable|null $identityMapper
+         * @return Response
+         */
+        public function sync(
+            DateTime  $startDate,
+            DateTime  $endDate,
+            array     $config = [],
+            ?callable $shouldContinue = null,
+            ?callable $identityMapper = null
+        ): Response;
 
-    /**
-     * Get the raw API client instance for the driver.
-     *
-     * @param array $config
-     * @return mixed
-     */
-    public function getApi(array $config = []): mixed;
+        /**
+         * Get the channel identifier (e.g. google_search_console).
+         */
+        public function getChannel(): string;
 
-    /**
-     * Get the current AuthProvider instance.
-     *
-     * @return AuthProviderInterface|null
-     */
-    public function getAuthProvider(): ?AuthProviderInterface;
+        /**
+         * Get the raw API client instance for the driver.
+         *
+         * @param array $config
+         * @return mixed
+         */
+        public function getApi(array $config = []): mixed;
 
-    /**
-     * Get the environment variable mapping for this driver.
-     * 
-     * @return array [ENV_VAR => config_key]
-     */
-    public static function getEnvMapping(): array;
+        /**
+         * Get the current AuthProvider instance.
+         *
+         * @return AuthProviderInterface|null
+         */
+        public function getAuthProvider(): ?AuthProviderInterface;
 
-    /**
-     * Get the list of environment variables that are updatable for this driver.
-     *
-     * @return array
-     */
-    public function getUpdatableCredentials(): array;
+        /**
+         * Get the environment variable mapping for this driver.
+         *
+         * @return array [ENV_VAR => config_key]
+         */
+        public static function getEnvMapping(): array;
 
-    /**
-     * Get the configuration schema for the driver.
-     *
-     * @return array
-     */
-    public function getConfigSchema(): array;
+        /**
+         * Get the list of environment variables that are updatable for this driver.
+         *
+         * @return array
+         */
+        public function getUpdatableCredentials(): array;
 
-    /**
-     * Validate and prepare the configuration for the driver.
-     * Use this to apply defaults and normalize structures.
-     *
-     * @param array $config
-     * @return array
-     */
-    public function validateConfig(array $config): array;
+        /**
+         * Get the configuration schema for the driver.
+         *
+         * @return array
+         */
+        public function getConfigSchema(): array;
 
-    /**
-     * Seed realistic demo data for this driver.
-     * 
-     * @param SeederInterface $seeder The seeder utility (command or service)
-     * @param array $config
-     * @return void
-     */
-    public function seedDemoData(SeederInterface $seeder, array $config = []): void;
+        /**
+         * Validate and prepare the configuration for the driver.
+         * Use this to apply defaults and normalize structures.
+         *
+         * @param array $config
+         * @return array
+         */
+        public function validateConfig(array $config): array;
 
-    /**
-     * Initialize driver-specific configurations in the host (e.g. Repository relations).
-     */
-    public function boot(): void;
+        /**
+         * Seed realistic demo data for this driver.
+         *
+         * @param SeederInterface $seeder The seeder utility (command or service)
+         * @param array $config
+         * @return void
+         */
+        public function seedDemoData(SeederInterface $seeder, array $config = []): void;
 
-    /**
-     * Get the asset identification patterns for this driver.
-     * Used to generate canonical IDs from URLs or hostnames.
-     *
-     * @return array
-     */
-    public static function getAssetPatterns(): array;
+        /**
+         * Initialize driver-specific configurations in the host (e.g. Repository relations).
+         */
+        public function boot(): void;
 
-    /**
-     * Derive a platform-specific ID for an asset based on its functional role.
-     *
-     * @param array $asset
-     * @param AssetCategory $category
-     * @param string $context The driver-specific pattern key (e.g. 'fb_page', 'gsc_site')
-     * @return string
-     */
-    public static function getPlatformId(array $asset, AssetCategory $category, string $context): string;
+        /**
+         * Get the asset identification patterns for this driver.
+         * Used to generate canonical IDs from URLs or hostnames.
+         *
+         * @return array
+         */
+        public static function getAssetPatterns(): array;
 
-    /**
-     * Derive a cross-channel canonical ID for an asset.
-     *
-     * @param array $asset
-     * @param AssetCategory $category
-     * @param string $context
-     * @return string
-     */
-    public static function getCanonicalId(array $asset, AssetCategory $category, string $context): string;
+        /**
+         * Derive a platform-specific ID for an asset based on its functional role.
+         *
+         * @param array $asset
+         * @param AssetCategory $category
+         * @param string $context The driver-specific pattern key (e.g. 'fb_page', 'gsc_site')
+         * @return string
+         */
+        public static function getPlatformId(array $asset, AssetCategory $category, string $context): string;
 
-    /**
-     * Prepare UI-specific configuration mapping for this channel.
-     *
-     * @param array $channelConfig The raw channel configuration from YAML.
-     * @return array key-value pairs to be injected into the UI state.
-     */
-    public function prepareUiConfig(array $channelConfig): array;
+        /**
+         * Derive a cross-channel canonical ID for an asset.
+         *
+         * @param array $asset
+         * @param AssetCategory $category
+         * @param string $context
+         * @return string
+         */
+        public static function getCanonicalId(array $asset, AssetCategory $category, string $context): string;
 
-    /**
-     * Initialize channel-specific entity definitions (Pages, Accounts, etc.).
-     * Returns a manifest of required entities to be created/validated by the host.
-     *
-     * @param array $config The channel configuration.
-     * @return array Summary/Manifest of entities.
-     */
-    public function initializeEntities(array $config = []): array;
+        /**
+         * Prepare UI-specific configuration mapping for this channel.
+         *
+         * @param array $channelConfig The raw channel configuration from YAML.
+         * @return array key-value pairs to be injected into the UI state.
+         */
+        public function prepareUiConfig(array $channelConfig): array;
 
-    /**
-     * Clear channel-specific data requests.
-     *
-     * @param string $mode The reset mode: 'entities', 'metrics', or 'all' (default).
-     * @param array $config Optional configuration for the reset.
-     * @return array Summary of items to be cleared by the host.
-     */
-    public function reset(string $mode = 'all', array $config = []): array;
+        /**
+         * Initialize channel-specific entity definitions (Pages, Accounts, etc.).
+         * Returns a manifest of required entities to be created/validated by the host.
+         *
+         * @param array $config The channel configuration.
+         * @return array Summary/Manifest of entities.
+         */
+        public function initializeEntities(array $config = []): array;
 
-    /**
-     * Get the supported page types for this driver.
-     *
-     * @return array [type_key => label]
-     */
-    public static function getPageTypes(): array;
+        /**
+         * Clear channel-specific data requests.
+         *
+         * @param string $mode The reset mode: 'entities', 'metrics', or 'all' (default).
+         * @param array $config Optional configuration for the reset.
+         * @return array Summary of items to be cleared by the host.
+         */
+        public function reset(string $mode = 'all', array $config = []): array;
 
-    /**
-     * Get the supported account types for this driver.
-     *
-     * @return array [type_key => label]
-     */
-    public static function getAccountTypes(): array;
+        /**
+         * Get the supported page types for this driver.
+         *
+         * @return array [type_key => label]
+         */
+        public static function getPageTypes(): array;
 
-    /**
-     * Get the entity paths for this driver.
-     *
-     * @return array
-     */
-    public static function getEntityPaths(): array;
+        /**
+         * Get the supported account types for this driver.
+         *
+         * @return array [type_key => label]
+         */
+        public static function getAccountTypes(): array;
 
-    /**
-     * Get the date filter mapping for this driver.
-     * Returns an array like ['start' => 'createdAtMin', 'end' => 'createdAtMax']
-     * or empty array if not supported.
-     *
-     * @return array
-     */
-    public function getDateFilterMapping(): array;
+        /**
+         * Get the entity paths for this driver.
+         *
+         * @return array
+         */
+        public static function getEntityPaths(): array;
 
-    /**
-     * Get the default dynamic instance generation rules for this driver.
-     * These rules define how many historical quarters, recent syncs, etc. are created.
-     *
-     * @return array [history_months => int, entities_sync => string|bool, recent_cron_hour => int, recent_cron_minute => int]
-     */
-    public static function getInstanceRules(): array;
+        /**
+         * Get the date filter mapping for this driver.
+         * Returns an array like ['start' => 'createdAtMin', 'end' => 'createdAtMax']
+         * or empty array if not supported.
+         *
+         * @return array
+         */
+        public function getDateFilterMapping(): array;
 
-    /*
-     *
-     */
-    public static function getPages(array $asset): array;
+        /**
+         * Get the default dynamic instance generation rules for this driver.
+         * These rules define how many historical quarters, recent syncs, etc. are created.
+         *
+         * @return array [history_months => int, entities_sync => string|bool, recent_cron_hour => int, recent_cron_minute => int]
+         */
+        public static function getInstanceRules(): array;
 
-    /*
-     *
-     */
-    public static function getChanneledAccounts(array $asset): array;
+        /*
+         *
+         */
+        public static function getPages(array $asset): array;
 
-    /**
-     * Get the JavaScript handler for this driver's configuration in the UI.
-     * 
-     * @return string
-     */
-    public function getConfigurationJs(): string;
-}
+        /*
+         *
+         */
+        public static function getChanneledAccounts(array $asset): array;
+
+        /**
+         * Get the JavaScript handler for this driver's configuration in the UI.
+         *
+         * @return string
+         */
+        public function getConfigurationJs(): string;
+
+        /**
+         * Get the required worker tier for this driver.
+         *
+         * @return InstanceTier
+         */
+        public function getRequiredInstanceTier(): InstanceTier;
+    }

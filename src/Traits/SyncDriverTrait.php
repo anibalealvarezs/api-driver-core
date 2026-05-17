@@ -3,6 +3,7 @@
     namespace Anibalealvarezs\ApiDriverCore\Traits;
 
     use Anibalealvarezs\ApiDriverCore\Enums\AssetCategory;
+    use Anibalealvarezs\ApiDriverCore\Enums\InstanceTier;
     use Anibalealvarezs\ApiDriverCore\Services\ConfigSchemaRegistryService;
 
     trait SyncDriverTrait
@@ -304,5 +305,13 @@
         public static function getRateLimitWhitelist(): array
         {
             return [];
+        }
+
+        /**
+         * @return InstanceTier
+         */
+        public function getRequiredInstanceTier(): InstanceTier
+        {
+            return InstanceTier::BASIC;
         }
     }
