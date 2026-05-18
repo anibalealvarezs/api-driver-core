@@ -158,6 +158,10 @@ final class CanonicalMetricDefinitionRegistry
             'label' => 'Total Page Views',
             'category' => 'engagement',
         ],
+        'video_views' => [
+            'label' => 'Video Views',
+            'category' => 'engagement',
+        ],
     ];
 
     /**
@@ -170,9 +174,9 @@ final class CanonicalMetricDefinitionRegistry
         'purchase_roas' => 'roas_purchase',
         'website_purchase_roas' => 'roas_purchase',
         'plays' => 'views',
-        'video_views' => 'views',
-        'page_video_views' => 'views',
-        'post_video_views' => 'views',
+        'video_views' => 'video_views',
+        'page_video_views' => 'video_views',
+        'post_video_views' => 'video_views',
         'post_reactions_by_type_total' => 'likes',
         'saved' => 'saves',
         'post_engagement' => 'total_interactions',
