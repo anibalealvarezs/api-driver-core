@@ -44,6 +44,11 @@ abstract class BaseAuthProvider implements AuthProviderInterface
         return !empty($this->getAccessToken());
     }
 
+    public function hasCredentials(): bool
+    {
+        return !empty($this->data);
+    }
+
     public function isExpired(): bool
     {
         return false;

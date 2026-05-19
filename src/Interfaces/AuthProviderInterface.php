@@ -29,6 +29,11 @@ interface AuthProviderInterface
     public function isValid(): bool;
 
     /**
+     * Check if any credentials are configured. Does not trigger token refreshes or network calls.
+     */
+    public function hasCredentials(): bool;
+
+    /**
      * Check if the current tokens are expired.
      */
     public function isExpired(): bool;
