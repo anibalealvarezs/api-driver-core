@@ -35,11 +35,7 @@ abstract class BaseAuthProvider implements AuthProviderInterface
     protected function save(): void
     {
         if ($this->filePath) {
-            $dir = dirname($this->filePath);
-            if (!is_dir($dir)) {
-                mkdir($dir, 0755, true);
-            }
-            file_put_contents($this->filePath, json_encode($this->data, JSON_PRETTY_PRINT));
+            \Anibalealvarezs\ApiDriverCore\Helpers\Helpers::writeTokenFile($this->filePath, $this->data);
         }
     }
 

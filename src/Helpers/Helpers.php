@@ -140,4 +140,30 @@ class Helpers
 
         return false;
     }
+
+    /**
+     * Safely and atomically write data to a JSON token file, ensuring directory creation and permissions.
+     *
+     * @param string $filePath
+     * @param array $data
+     * @param int $flags json_encode flags
+     * @throws \Exception
+     */
+    public static function writeTokenFile(string $filePath, array $data, int $flags = JSON_PRETTY_PRINT): void
+    {
+        $dir = dirname($filePath);
+        if (!is_dir($dir)) {
+            if (!@mkdir($dir, 0755, true) && !is_dir($dir)) {
+                throw new \Exception("Cannot create storage directory: {$dir}. Please check server directory write permissions.");
+            }
+        }
+
+        if (!is_writable($dir)) {
+            throw new \Exception("Storage directory is not writable: {$dir}. Please check server permissions.");
+        }
+
+        if (@file_put_contents($filePath, json_encode($data, $flags)) === false) {
+            throw new \Exception("Failed to write to file: {$filePath}. Please check write permissions.");
+        }
+    }
 }
