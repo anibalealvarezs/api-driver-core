@@ -1,46 +1,46 @@
 {
-  "name": "anibalealvarezs/api-driver-core",
-  "description": "Core interfaces and orchestration logic for APIs Hub drivers.",
-  "type": "library",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Aníbal Álvarez",
-      "email": "aalvarez@chmw.co"
-    }
-  ],
-  "require": {
-    "symfony/http-foundation": "^6.0 || ^7.0",
-    "doctrine/orm": "^2.0 || ^3.0",
-    "doctrine/collections": "^2.0",
-    "nesbot/carbon": "^2.61 || ^3.0",
-    "psr/log": "^1.1 || ^2.0 || ^3.0",
-    "symfony/yaml": "^6.0 || ^7.0",
-    "predis/predis": "^2.0",
-    "anibalealvarezs/api-client-skeleton": "dev-main",
-    "php": ">=8.3"
-  },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://satis.anibalalvarez.com/"
-    }
-  ],
-  "autoload": {
-    "psr-4": {
-      "Anibalealvarezs\\ApiDriverCore\\": "src/"
-    }
-  },
-  "minimum-stability": "dev",
-  "require-dev": {
-    "fakerphp/faker": "^1.23",
-    "doctrine/instantiator": "^1.5",
-    "phpunit/phpunit": "^9.6.20"
-  },
-  "config": {
-    "platform": {
-      "php": "8.3.0"
-    }
-  },
-  "prefer-stable": true
+    "name":  "anibalealvarezs/api-driver-core",
+    "description":  "Core interfaces and orchestration logic for APIs Hub drivers.",
+    "type":  "library",
+    "license":  "MIT",
+    "authors":  [
+                    {
+                        "name":  "Aní­bal Álvarez",
+                        "email":  "aalvarez@chmw.co"
+                    }
+                ],
+    "require":  {
+                    "symfony/http-foundation":  "^6.0 || ^7.0",
+                    "doctrine/orm":  "^2.0 || ^3.0",
+                    "doctrine/collections":  "^2.0",
+                    "nesbot/carbon":  "^2.61 || ^3.0",
+                    "psr/log":  "^1.1 || ^2.0 || ^3.0",
+                    "symfony/yaml":  "^6.0 || ^7.0",
+                    "predis/predis":  "^2.0",
+                    "anibalealvarezs/api-client-skeleton":  "^1.0.0",
+                    "php":  ">=8.3"
+                },
+    "repositories":  [
+                         {
+                             "type":  "composer",
+                             "url":  "https://satis.anibalalvarez.com/"
+                         }
+                     ],
+    "autoload":  {
+                     "psr-4":  {
+                                   "Anibalealvarezs\\ApiDriverCore\\":  "src/"
+                               }
+                 },
+    "minimum-stability":  "dev",
+    "require-dev":  {
+                        "fakerphp/faker":  "^1.23",
+                        "doctrine/instantiator":  "^1.5",
+                        "phpunit/phpunit":  "^9.6.20"
+                    },
+    "config":  {
+                   "platform":  {
+                                    "php":  "8.3.0"
+                                }
+               },
+    "prefer-stable":  true
 }
