@@ -54,4 +54,14 @@ interface AuthProviderInterface
      * @param array $credentials
      */
     public function updateCredentials(array $credentials): void;
+
+    /**
+     * Get the configured token refresher callback, if any.
+     */
+    public function getTokenRefresherCallback(): ?callable;
+
+    /**
+     * Set the token refresher callback to be injected into the SDK.
+     */
+    public function setTokenRefresherCallback(?callable $callback): void;
 }

@@ -10,6 +10,8 @@ abstract class BaseAuthProvider implements AuthProviderInterface
 {
     protected array $data = [];
     protected string $filePath = "";
+    /** @var callable|null */
+    protected $tokenRefresherCallback = null;
 
     public function __construct(array|string $configOrPath = "")
     {
@@ -84,4 +86,14 @@ abstract class BaseAuthProvider implements AuthProviderInterface
     abstract public function getAccessToken(): string;
     abstract public function setAccessToken(string $token): void;
     abstract public function getUserId(): string;
+
+    public function getTokenRefresherCallback(): ?callable
+    {
+        return $this->tokenRefresherCallback;
+    }
+
+    public function setTokenRefresherCallback(?callable $callback): void
+    {
+        $this->tokenRefresherCallback = $callback;
+    }
 }

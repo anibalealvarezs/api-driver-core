@@ -130,6 +130,11 @@
                 } else {
                     $authProvider = new $authProviderClass($channelConfig);
                 }
+
+                if (method_exists($authProvider, 'setTokenRefresherCallback')) {
+                    $authProvider->setTokenRefresherCallback(self::createTokenRefresherCallback($channel, $logger));
+                }
+
                 $driver = new $driverClass($authProvider, $logger);
             } else {
                 $driver = new $driverClass(null, $logger);
@@ -197,6 +202,70 @@
             return array_filter(array_keys(self::$registry), function ($channel) {
                 return isset(self::$registry[$channel]['driver']);
             });
+        }
+
+        /**
+         * Creates a resilient token refresher callback that delegates refresh to the Facade Token Authority.
+         *
+         * @param string $channel
+         * @param LoggerInterface|null $logger
+         * @return callable|null
+         */
+        private static function createTokenRefresherCallback(string $channel, ?LoggerInterface $logger): ?callable
+        {
+            $enabled = filter_var($_ENV['TOKEN_AUTHORITY_ENABLED'] ?? getenv('TOKEN_AUTHORITY_ENABLED') ?? false, FILTER_VALIDATE_BOOLEAN);
+            $url = $_ENV['TOKEN_AUTHORITY_URL'] ?? getenv('TOKEN_AUTHORITY_URL');
+            $bearer = $_ENV['TOKEN_AUTHORITY_BEARER'] ?? getenv('TOKEN_AUTHORITY_BEARER');
+
+            if (!$enabled || !$url || !$bearer) {
+                return null;
+            }
+
+            return function () use ($channel, $url, $bearer, $logger) {
+                $maxRetries = 10;
+                $baseBackoff = 30; // seconds
+
+                for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
+                    try {
+                        $logger?->info("Requesting new token for $channel from Token Authority (Attempt $attempt/$maxRetries)");
+
+                        $client = new \GuzzleHttp\Client(['timeout' => 30]);
+                        $response = $client->post($url, [
+                            'headers' => [
+                                'Authorization' => 'Bearer ' . $bearer,
+                                'Accept' => 'application/json',
+                                'Content-Type' => 'application/json',
+                            ],
+                            'json' => [
+                                'channel' => $channel,
+                            ]
+                        ]);
+
+                        $data = json_decode($response->getBody()->getContents(), true);
+
+                        if ($response->getStatusCode() === 200 && isset($data['access_token'])) {
+                            $logger?->info("Successfully received new token for $channel from Token Authority.");
+                            return $data['access_token'];
+                        }
+
+                        throw new Exception("Invalid response from Token Authority: " . json_encode($data));
+                    } catch (Exception $e) {
+                        $logger?->warning("Token Authority refresh failed for $channel on attempt $attempt: " . $e->getMessage());
+
+                        if ($attempt === $maxRetries) {
+                            $logger?->error("Token Authority refresh failed after $maxRetries attempts for $channel.");
+                            throw new Exception("Failed to obtain token from Authority after $maxRetries attempts.", 0, $e);
+                        }
+
+                        // Exponential backoff
+                        $sleepTime = $baseBackoff * pow(2, $attempt - 1);
+                        $logger?->info("Sleeping for $sleepTime seconds before next Token Authority attempt...");
+                        sleep($sleepTime);
+                    }
+                }
+
+                return null;
+            };
         }
 
         /**
