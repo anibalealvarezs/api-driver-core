@@ -70,6 +70,10 @@ final class CanonicalMetricDefinitionRegistry
             'label' => 'Views',
             'category' => 'engagement',
         ],
+        'content_views' => [
+            'label' => 'Content Views',
+            'category' => 'engagement',
+        ],
         'profile_views' => [
             'label' => 'Profile Views',
             'category' => 'engagement',
