@@ -11,18 +11,14 @@ use Anibalealvarezs\ApiSkeleton\Enums\Device as DeviceEnum;
 use InvalidArgumentException;
 
 /**
- * KeyGenerator
- * 
- * Standardized key generation for metrics and entities.
- * Refactored to be entity-agnostic for the base skeleton.
+ * KeyGenerator v1.13.3
+ *
+ * Snapshot of the KeyGenerator BEFORE the addition of location/state/city params.
+ * Used to verify that the new generator produces identical signatures
+ * for existing records (where the new fields are null).
  */
-class KeyGenerator
+class KeyGenerator_v1_13_3
 {
-
-    /**
-     * @param object|string $query
-     * @return string
-     */
     public static function generateQueryKey(object|string $query): string
     {
         if (is_object($query) && method_exists($query, 'getQuery')) {
@@ -31,31 +27,6 @@ class KeyGenerator
         return md5((string) $query);
     }
 
-    /**
-     * @param Channel|int|string $channel
-     * @param string $name
-     * @param Period|string $period
-     * @param object|string|null $account
-     * @param object|string|null $channeledAccount
-     * @param object|string|null $campaign
-     * @param object|string|null $channeledCampaign
-     * @param object|string|null $channeledAdGroup
-     * @param object|string|null $channeledAd
-     * @param string|null $creative
-     * @param object|string|null $page
-     * @param object|string|null $query
-     * @param object|string|null $post
-     * @param object|string|null $product
-     * @param object|string|null $customer
-     * @param object|string|null $order
-     * @param object|CountryEnum|string|null $country
-     * @param object|DeviceEnum|string|null $device
-     * @param object|int|string|null $dimensionSet
-     * @param object|string|int|null $location
-     * @param object|string|int|null $state
-     * @param object|string|int|null $city
-     * @return string
-     */
     public static function generateMetricConfigKey(
         mixed $channel,
         string $name,
@@ -75,14 +46,11 @@ class KeyGenerator
         object|string|null $order = null,
         mixed $country = null,
         mixed $device = null,
-        object|int|string|null $dimensionSet = null,
-        object|string|int|null $location = null,
-        object|string|int|null $state = null,
-        object|string|int|null $city = null
+        object|int|string|null $dimensionSet = null
     ): string {
         $emptyHash = self::generateDimensionsHash([]);
         if ($dimensionSet === $emptyHash) { $dimensionSet = null; }
-        
+
         $channelVal = $channel instanceof \BackedEnum ? $channel->value : $channel;
 
         $params = [
@@ -104,22 +72,10 @@ class KeyGenerator
             'order' => (string) self::extractString($order, 'getOrderId'),
             'country' => ($country instanceof \BackedEnum) ? $country->value : self::extractString($country, 'getCode'),
             'device' => ($device instanceof \BackedEnum) ? $device->value : self::extractString($device, 'getType'),
-            'dimensionSet' => self::extractString($dimensionSet, 'getHash'),
-            'location' => self::extractString($location, 'getPlatformId'),
-            'state' => self::extractString($state, 'getName'),
-            'city' => self::extractString($city, 'getName'),
+            'dimensionSet' => self::extractString($dimensionSet, 'getHash')
         ];
 
         return md5(json_encode($params, JSON_UNESCAPED_UNICODE));
-    }
-
-    private static function extractString(mixed $val, string $method): ?string
-    {
-        if (is_null($val)) return null;
-        if (is_object($val) && method_exists($val, $method)) {
-            return (string) $val->$method();
-        }
-        return (string) $val;
     }
 
     public static function generateMetricKey(
@@ -142,9 +98,6 @@ class KeyGenerator
         object|int|null $order = null,
         mixed $country = null,
         mixed $device = null,
-        object|int|string|null $location = null,
-        object|int|string|null $state = null,
-        object|int|string|null $city = null,
         array $dimensions = [],
         ?string $dimensionsHash = null,
         ?string $metricConfigKey = null,
@@ -172,10 +125,7 @@ class KeyGenerator
                 order: $order,
                 country: $country,
                 device: $device,
-                dimensionSet: $dimensionsHash,
-                location: $location,
-                state: $state,
-                city: $city
+                dimensionSet: $dimensionsHash
             );
         }
         if (is_null($dimensionsHash)) {
@@ -215,83 +165,12 @@ class KeyGenerator
         ], JSON_UNESCAPED_UNICODE));
     }
 
-    public static function generateCustomerKey(string $email): string
+    private static function extractString(mixed $val, string $method): ?string
     {
-        return md5(strtolower(trim($email)));
-    }
-
-    public static function generateChanneledCustomerKey(string $channel, string $platformId): string
-    {
-        return md5($channel . '_' . $platformId);
-    }
-
-    public static function generateProductKey(string $productId): string
-    {
-        return md5((string)$productId);
-    }
-
-    public static function generateChanneledProductKey(string $channel, string $platformId): string
-    {
-        return md5($channel . '_' . $platformId);
-    }
-
-    public static function generateVendorKey(string $name): string
-    {
-        return md5(strtolower(trim($name)));
-    }
-
-    public static function generateChanneledVendorKey(string $channel, string $name): string
-    {
-        return md5($channel . '_' . strtolower(trim($name)));
-    }
-
-    public static function generateProductVariantKey(string $productVariantId): string
-    {
-        return md5((string)$productVariantId);
-    }
-
-    public static function generateChanneledProductVariantKey(string $channel, string $platformId): string
-    {
-        return md5($channel . '_' . $platformId);
-    }
-
-    public static function generateProductCategoryKey(string $productCategoryId): string
-    {
-        return md5((string)$productCategoryId);
-    }
-
-    public static function generateChanneledProductCategoryKey(string $channel, string $platformId): string
-    {
-        return md5($channel . '_' . $platformId);
-    }
-
-    public static function generateOrderKey(string $orderId): string
-    {
-        return md5((string)$orderId);
-    }
-
-    public static function generateChanneledOrderKey(string $channel, string $platformId): string
-    {
-        return md5($channel . '_' . $platformId);
-    }
-
-    public static function generateDiscountKey(string $code): string
-    {
-        return md5((string)$code);
-    }
-
-    public static function generateChanneledDiscountKey(string $channel, string $code): string
-    {
-        return md5($channel . '_' . $code);
-    }
-
-    public static function generatePriceRuleKey(string $priceRuleId): string
-    {
-        return md5((string)$priceRuleId);
-    }
-
-    public static function generateChanneledPriceRuleKey(string $channel, string $platformId): string
-    {
-        return md5($channel . '_' . $platformId);
+        if (is_null($val)) return null;
+        if (is_object($val) && method_exists($val, $method)) {
+            return (string) $val->$method();
+        }
+        return (string) $val;
     }
 }
