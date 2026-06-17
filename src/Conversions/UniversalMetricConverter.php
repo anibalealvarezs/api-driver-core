@@ -158,7 +158,7 @@
                                     'channel', 'name', 'period', 'account', 'channeledAccount', 'campaign',
                                     'channeledCampaign', 'channeledAdGroup', 'channeledAd', 'creative',
                                     'page', 'query', 'post', 'product', 'customer', 'order', 'country',
-                                    'device', 'dimensionSet'
+                                    'device', 'dimensionSet', 'location', 'state', 'city'
                                 ]);
                         }, ARRAY_FILTER_USE_BOTH);
 
