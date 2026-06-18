@@ -298,6 +298,14 @@
         }
 
         /**
+         * @inheritdoc
+         */
+        public function getConfigurationHtml(): string
+        {
+            return "";
+        }
+
+        /**
          * Get the routes that should be whitelisted from rate limiting.
          *
          * @return array

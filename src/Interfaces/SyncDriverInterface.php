@@ -298,6 +298,13 @@
         public function getConfigurationJs(): string;
 
         /**
+         * Get the HTML UI block for this driver's configuration.
+         *
+         * @return string
+         */
+        public function getConfigurationHtml(): string;
+
+        /**
          * Get the required worker tier for this driver.
          *
          * @return InstanceTier
