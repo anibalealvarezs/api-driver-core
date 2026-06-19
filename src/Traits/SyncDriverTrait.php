@@ -19,6 +19,13 @@
         }
 
         /**
+         * Get the display label for the channel.
+         *
+         * @return string
+         */
+        abstract public static function getChannelLabel(): string;
+
+        /**
          * Get the display icon for the channel (letter or icon name).
          *
          * @return string
@@ -165,6 +172,13 @@
         {
             return ['cleared' => 0, 'mode' => $mode];
         }
+
+        /**
+         * Get the channel name (e.g. google_business_profile).
+         *
+         * @return string
+         */
+        abstract public function getChannel(): string;
 
         /**
          * @param array $config
