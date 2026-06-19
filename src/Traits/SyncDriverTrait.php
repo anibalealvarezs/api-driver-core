@@ -326,7 +326,7 @@
         /**
          * @return InstanceTier
          */
-        public function getRequiredInstanceTier(): InstanceTier
+        public function getRequiredInstanceTier(array $config = []): InstanceTier
         {
             return InstanceTier::BASIC;
         }
