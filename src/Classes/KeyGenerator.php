@@ -78,7 +78,9 @@ class KeyGenerator
         object|int|string|null $dimensionSet = null,
         object|string|int|null $location = null,
         object|string|int|null $state = null,
-        object|string|int|null $city = null
+        object|string|int|null $city = null,
+        object|string|null $event = null,
+        object|string|null $channeledEvent = null
     ): string {
         $emptyHash = self::generateDimensionsHash([]);
         if ($dimensionSet === $emptyHash) { $dimensionSet = null; }
@@ -108,6 +110,8 @@ class KeyGenerator
             'location' => self::extractString($location, 'getPlatformId'),
             'state' => self::extractString($state, 'getName'),
             'city' => self::extractString($city, 'getName'),
+            'event' => self::extractString($event, 'getName'),
+            'channeledEvent' => self::extractString($channeledEvent, 'getPlatformId'),
         ];
 
         return md5(json_encode($params, JSON_UNESCAPED_UNICODE));
@@ -145,6 +149,8 @@ class KeyGenerator
         object|int|string|null $location = null,
         object|int|string|null $state = null,
         object|int|string|null $city = null,
+        object|string|null $event = null,
+        object|string|null $channeledEvent = null,
         array $dimensions = [],
         ?string $dimensionsHash = null,
         ?string $metricConfigKey = null,
@@ -175,7 +181,9 @@ class KeyGenerator
                 dimensionSet: $dimensionsHash,
                 location: $location,
                 state: $state,
-                city: $city
+                city: $city,
+                event: $event,
+                channeledEvent: $channeledEvent
             );
         }
         if (is_null($dimensionsHash)) {

@@ -11,4 +11,5 @@ enum AssetCategory: string
     case UNIT = 'unit';           // Granular data units (Post, Ad, Media item)
     case RESOURCE = 'resource';   // Shared assets (Creative, Audience)
     case LOCATIONABLE = 'locationable'; // Assets with geographic mapping (GBP Location)
+    case EVENT = 'event';         // Conversion and tracking events (GA4 Event, Pixel Event)
 }
