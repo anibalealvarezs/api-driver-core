@@ -10,4 +10,5 @@ enum AssetCategory: string
     case GROUPING = 'grouping';   // Mid-level organizational unit (AdSet, Folder)
     case UNIT = 'unit';           // Granular data units (Post, Ad, Media item)
     case RESOURCE = 'resource';   // Shared assets (Creative, Audience)
+    case LOCATIONABLE = 'locationable'; // Assets with geographic mapping (GBP Location)
 }

@@ -288,6 +288,11 @@
         /*
          *
          */
+        public static function getLocations(array $asset): array;
+
+        /*
+         *
+         */
         public static function getChanneledAccounts(array $asset): array;
 
         /**

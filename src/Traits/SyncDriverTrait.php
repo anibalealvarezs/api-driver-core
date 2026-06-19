@@ -220,6 +220,14 @@
         /*
          *
          */
+        public static function getLocations(array $asset): array
+        {
+            return [];
+        }
+
+        /*
+         *
+         */
         public static function getChanneledAccounts(array $asset): array
         {
             return [];
