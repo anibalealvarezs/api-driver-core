@@ -202,6 +202,9 @@ final class CanonicalMetricDefinitionRegistry
         'post_video_avg_time_watched' => 'ig_reels_avg_watch_time',
         'page_fan_adds' => 'fan_adds',
         'page_fans' => 'follower_count',
+        'activeusers' => 'reach',
+        'active_users' => 'reach',
+        'newusers' => 'new_users',
     ];
 
     /**
