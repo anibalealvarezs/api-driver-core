@@ -42,6 +42,14 @@ final class CanonicalMetricDefinitionRegistry
             'label' => 'Cost per Mille',
             'category' => 'ratio',
         ],
+        'sessions' => [
+            'label' => 'Sessions',
+            'category' => 'engagement',
+        ],
+        'new_users' => [
+            'label' => 'New Users',
+            'category' => 'engagement',
+        ],
         'conversions' => [
             'label' => 'Conversions',
             'category' => 'base',
