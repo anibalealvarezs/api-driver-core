@@ -174,6 +174,14 @@ final class CanonicalMetricDefinitionRegistry
             'label' => 'Video Views',
             'category' => 'engagement',
         ],
+        'event_count' => [
+            'label' => 'Event Count',
+            'category' => 'engagement',
+        ],
+        'bounce_rate' => [
+            'label' => 'Bounce Rate',
+            'category' => 'ratio',
+        ],
     ];
 
     /**
@@ -198,6 +206,8 @@ final class CanonicalMetricDefinitionRegistry
         'post_reach' => 'reach',
         'post_impressions_unique' => 'reach',
         'post_shares' => 'shares',
+        'eventcount' => 'event_count',
+        'bouncerate' => 'bounce_rate',
         'post_media_view' => 'views',
         'post_video_avg_time_watched' => 'ig_reels_avg_watch_time',
         'page_fan_adds' => 'fan_adds',
@@ -205,6 +215,8 @@ final class CanonicalMetricDefinitionRegistry
         'activeusers' => 'reach',
         'active_users' => 'reach',
         'newusers' => 'new_users',
+        'screenpageviews' => 'impressions',
+        'screen_page_views' => 'impressions',
     ];
 
     /**
