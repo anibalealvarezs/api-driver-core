@@ -130,6 +130,11 @@
                             'order'             => 'orderPlatformId',
                             'account'           => 'accountPlatformId',
                             'query'             => 'query',
+                            'event'             => 'eventPlatformId',
+                            'channeledEvent'    => 'channeledEventPlatformId',
+                            'location'          => 'location',
+                            'state'             => 'state',
+                            'city'              => 'city',
                         ];
                         $rowKeyExtras = []; // keyParam name => value from row
                         foreach ($config['row_key_fields'] ?? [] as $rowField => $targets) {
@@ -158,7 +163,7 @@
                                     'channel', 'name', 'period', 'account', 'channeledAccount', 'campaign',
                                     'channeledCampaign', 'channeledAdGroup', 'channeledAd', 'creative',
                                     'page', 'query', 'post', 'product', 'customer', 'order', 'country',
-                                    'device', 'dimensionSet', 'location', 'state', 'city'
+                                    'device', 'dimensionSet', 'location', 'state', 'city', 'event', 'channeledEvent'
                                 ]);
                         }, ARRAY_FILTER_USE_BOTH);
 
@@ -213,10 +218,13 @@
 
                         // Inject Row Entity Fields (legacy / explicit: row field -> metric property name)
                         // Use this when the canonical *PlatformId property name doesn't match row_key_fields.
-                        foreach ($config['row_entity_fields'] ?? [] as $rowField => $metricProp) {
+                        foreach ($config['row_entity_fields'] ?? [] as $rowField => $metricProps) {
                             $rawId = $row[$rowField] ?? null;
                             if ($rawId !== null && $rawId !== '') {
-                                $metric->$metricProp = (string)$rawId;
+                                $targetProps = is_array($metricProps) ? $metricProps : [$metricProps];
+                                foreach ($targetProps as $metricProp) {
+                                    $metric->$metricProp = (string)$rawId;
+                                }
                             }
                         }
 
@@ -280,11 +288,16 @@
                 'channeledAdPlatformId'       => null,
                 'creative'                    => null,
                 'creativePlatformId'          => null,
+                'event'                       => null,
+                'eventPlatformId'             => null,
                 'platform_id'                 => null,
                 'date'                        => null,
                 'query'                       => null,
                 'countryCode'                 => null,
                 'deviceType'                  => null,
+                'location'                    => null,
+                'state'                       => null,
+                'city'                        => null,
             ];
 
             return array_merge($template, $overrides);
