@@ -200,7 +200,8 @@
             self::loadRegistry();
 
             return array_filter(array_keys(self::$registry), function ($channel) {
-                return isset(self::$registry[$channel]['driver']);
+                $driverClass = self::$registry[$channel]['driver'] ?? null;
+                return $driverClass && class_exists($driverClass);
             });
         }
 
@@ -310,7 +311,8 @@
             $channels = [];
 
             foreach (self::$registry as $channel => $config) {
-                if (self::supportsEntity($channel, $entity)) {
+                $driverClass = $config['driver'] ?? null;
+                if ($driverClass && class_exists($driverClass) && self::supportsEntity($channel, $entity)) {
                     $channels[] = $channel;
                 }
             }
