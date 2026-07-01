@@ -253,6 +253,23 @@
                     } catch (Exception $e) {
                         $logger?->warning("Token Authority refresh failed for $channel on attempt $attempt: " . $e->getMessage());
 
+                        $errorMessage = strtolower($e->getMessage());
+                        $isPermanent = str_contains($errorMessage, 'invalid_grant') || 
+                                       str_contains($errorMessage, 'invalid_client') ||
+                                       str_contains($errorMessage, 'unauthorized_client');
+
+                        if (!$isPermanent && $e instanceof \GuzzleHttp\Exception\ClientException) {
+                            $statusCode = $e->getResponse()->getStatusCode();
+                            if (in_array($statusCode, [400, 401, 403])) {
+                                $isPermanent = true;
+                            }
+                        }
+
+                        if ($isPermanent) {
+                            $logger?->error("Permanent authentication failure detected during refresh for $channel.");
+                            throw new \Anibalealvarezs\ApiSkeleton\Classes\Exceptions\PermanentAuthenticationException("Token Authority reported a permanent authentication error: " . $e->getMessage());
+                        }
+
                         if ($attempt === $maxRetries) {
                             $logger?->error("Token Authority refresh failed after $maxRetries attempts for $channel.");
                             throw new Exception("Failed to obtain token from Authority after $maxRetries attempts.", 0, $e);
