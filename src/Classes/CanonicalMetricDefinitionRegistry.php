@@ -182,6 +182,14 @@ final class CanonicalMetricDefinitionRegistry
             'label' => 'Bounce Rate',
             'category' => 'ratio',
         ],
+        'average_session_duration' => [
+            'label' => 'Avg Session Duration',
+            'category' => 'engagement',
+        ],
+        'total_users' => [
+            'label' => 'Total Users',
+            'category' => 'engagement',
+        ],
     ];
 
     /**
@@ -208,6 +216,8 @@ final class CanonicalMetricDefinitionRegistry
         'post_shares' => 'shares',
         'eventcount' => 'event_count',
         'bouncerate' => 'bounce_rate',
+        'averagesessionduration' => 'average_session_duration',
+        'totalusers' => 'total_users',
         'post_media_view' => 'views',
         'post_video_avg_time_watched' => 'ig_reels_avg_watch_time',
         'page_fan_adds' => 'fan_adds',
