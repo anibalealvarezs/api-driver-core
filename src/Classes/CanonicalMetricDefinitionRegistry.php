@@ -190,12 +190,20 @@ final class CanonicalMetricDefinitionRegistry
             'label' => 'Total Users',
             'category' => 'engagement',
         ],
+        'total_revenue' => [
+            'label' => 'Total Revenue',
+            'category' => 'base',
+        ],
     ];
 
     /**
      * @var array<string, string>
      */
     private static array $aliases = [
+        'revenue' => 'total_revenue',
+        'totalrevenue' => 'total_revenue',
+        'totalRevenue' => 'total_revenue',
+        'total_revenue' => 'total_revenue',
         'results' => 'conversions',
         'cost_per_result' => 'cost_per_conversion',
         'result_rate' => 'conversion_rate',
