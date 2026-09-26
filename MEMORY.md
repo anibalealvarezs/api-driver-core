@@ -18,4 +18,6 @@
 - `CanonicalMetricDefinitionRegistry` now also exposes input-resolution metadata (`canonical`, `legacy_alias`, `deprecation`) so downstream resolvers can keep backward compatibility while flagging ambiguous requests like `actions` as deprecated instead of treating them as canonical.
 - **Aggregation Profiles**: Added support for `default_filters` in `AggregationProfileTemplates`, enabling drivers to specify mandatory platform-specific filters agnostically.
 - **Identity Resolution**: Standardized the `getPlatformEntityIdField()` contract across all drivers to facilitate agnostic identity extraction from channel data.
+- **v1.17.0 Contracts**: Added `Interfaces\PreAggregationProviderInterface` for contract-driven 1-day event metric rollups, and `Interfaces\MultiAccountAuthProviderInterface` for managing multi-account credential structures agnostically across drivers.
+
 
