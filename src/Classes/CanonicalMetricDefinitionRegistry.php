@@ -194,6 +194,26 @@ final class CanonicalMetricDefinitionRegistry
             'label' => 'Total Revenue',
             'category' => 'base',
         ],
+        'sends' => [
+            'label' => 'Sends',
+            'category' => 'messaging',
+        ],
+        'opens' => [
+            'label' => 'Opens',
+            'category' => 'engagement',
+        ],
+        'bounces' => [
+            'label' => 'Bounces',
+            'category' => 'messaging',
+        ],
+        'unsubscribes' => [
+            'label' => 'Unsubscribes',
+            'category' => 'engagement',
+        ],
+        'orders' => [
+            'label' => 'Orders',
+            'category' => 'ecommerce',
+        ],
     ];
 
     /**
@@ -238,6 +258,10 @@ final class CanonicalMetricDefinitionRegistry
         'newusers' => 'new_users',
         'screenpageviews' => 'impressions',
         'screen_page_views' => 'impressions',
+        'emails_sent' => 'sends',
+        'opens_total' => 'opens',
+        'bounces_total' => 'bounces',
+        'orders_count' => 'orders',
     ];
 
     /**

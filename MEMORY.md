@@ -19,5 +19,6 @@
 - **Aggregation Profiles**: Added support for `default_filters` in `AggregationProfileTemplates`, enabling drivers to specify mandatory platform-specific filters agnostically.
 - **Identity Resolution**: Standardized the `getPlatformEntityIdField()` contract across all drivers to facilitate agnostic identity extraction from channel data.
 - **v1.17.0 Contracts**: Added `Interfaces\PreAggregationProviderInterface` for contract-driven 1-day event metric rollups, and `Interfaces\MultiAccountAuthProviderInterface` for managing multi-account credential structures agnostically across drivers.
+- **Email & Messaging Canonical Metrics**: Added canonical metrics `sends`, `opens`, `bounces`, `unsubscribes`, and `orders`, along with aliases (`emails_sent`, `opens_total`, `bounces_total`, `orders_count`) to `CanonicalMetricDefinitionRegistry`.
 
 
