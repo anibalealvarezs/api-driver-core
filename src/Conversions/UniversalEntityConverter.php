@@ -38,9 +38,10 @@ class UniversalEntityConverter
             $entity->channel = $config['channel'] ?? 'unknown';
             
             // 1. Mandatory Fields
-            $entity->platformId = (string) (self::getNestedValue($row, $platformIdField) ?? '');
+            $rawPlatformId = is_callable($platformIdField) ? $platformIdField($row) : self::getNestedValue($row, $platformIdField);
+            $entity->platformId = (string) ($rawPlatformId ?? '');
             
-            $rawDate = self::getNestedValue($row, $dateField);
+            $rawDate = is_callable($dateField) ? $dateField($row) : self::getNestedValue($row, $dateField);
             $entity->platformCreatedAt = ($rawDate && trim((string)$rawDate) !== '') ? Carbon::parse($rawDate) : null;
 
             // 2. Dynamic Mapping
