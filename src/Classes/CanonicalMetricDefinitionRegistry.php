@@ -214,6 +214,26 @@ final class CanonicalMetricDefinitionRegistry
             'label' => 'Orders',
             'category' => 'ecommerce',
         ],
+        'opens_standard' => [
+            'label' => 'Standard Opens',
+            'category' => 'engagement',
+        ],
+        'opens_proxy' => [
+            'label' => 'Proxy Opens',
+            'category' => 'engagement',
+        ],
+        'clicks_unique' => [
+            'label' => 'Unique Clicks',
+            'category' => 'engagement',
+        ],
+        'bounces_hard' => [
+            'label' => 'Hard Bounces',
+            'category' => 'messaging',
+        ],
+        'bounces_soft' => [
+            'label' => 'Soft Bounces',
+            'category' => 'messaging',
+        ],
     ];
 
     /**
