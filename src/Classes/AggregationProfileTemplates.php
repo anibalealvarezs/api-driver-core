@@ -92,6 +92,7 @@ final class AggregationProfileTemplates
             'metric_nature' => 'weighted_ratio',
             'period_modes' => ['daily', 'weekly', 'monthly'],
             'group_patterns' => [
+                [],
                 ['campaign'],
                 ['campaign', 'adset'],
                 ['campaign', 'adset', 'ad'],
@@ -108,6 +109,11 @@ final class AggregationProfileTemplates
                 '*' => 'sum',
                 'ctr' => 'weighted_by_metric',
                 'cpc' => 'weighted_by_metric',
+                'cpm' => 'weighted_by_metric',
+                'cost_per_result' => 'weighted_by_metric',
+                'cost_per_conversion' => 'weighted_by_metric',
+                'cost_per_purchase' => 'weighted_by_metric',
+                'cost_per_lead' => 'weighted_by_metric',
             ],
         ]);
     }

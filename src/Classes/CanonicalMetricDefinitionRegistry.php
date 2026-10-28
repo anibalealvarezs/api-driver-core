@@ -234,6 +234,26 @@ final class CanonicalMetricDefinitionRegistry
             'label' => 'Soft Bounces',
             'category' => 'messaging',
         ],
+        'purchases' => [
+            'label' => 'Purchases',
+            'category' => 'ecommerce',
+        ],
+        'purchase_value' => [
+            'label' => 'Purchase Value',
+            'category' => 'ecommerce',
+        ],
+        'cost_per_purchase' => [
+            'label' => 'Cost per Purchase',
+            'category' => 'ratio',
+        ],
+        'leads' => [
+            'label' => 'Leads',
+            'category' => 'base',
+        ],
+        'cost_per_lead' => [
+            'label' => 'Cost per Lead',
+            'category' => 'ratio',
+        ],
     ];
 
     /**
