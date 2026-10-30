@@ -62,6 +62,8 @@
                 'group_patterns'     => self::normalizeGroupPatterns($profile['group_patterns'] ?? $profile['groupPatterns'] ?? [['metricDate']]),
                 'filter_contract'    => self::normalizeFilterContract($profile['filter_contract'] ?? $profile['filterContract'] ?? []),
                 'reducer_strategies' => self::normalizeReducerStrategies($profile['reducer_strategies'] ?? $profile['reducerStrategies'] ?? []),
+                // Optional driver-owned policy, enforced before optimized or legacy execution.
+                'query_contract'     => is_array($profile['query_contract'] ?? null) ? $profile['query_contract'] : [],
             ];
         }
 

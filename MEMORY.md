@@ -9,6 +9,7 @@
 - Use `D:\laragon\www\_shared\AGENTS.md` and `D:\laragon\www\_shared\MEMORY.md` for cross-repository protocols and workspace-wide learnings.
 - Keep secrets, credentials, tokens, and private endpoints out of this file.
 ## Current notes
+- Optional query_contract (2026-10-30): AggregationProfileNormalizer preserves driver-declared query policy verbatim; tenant validates scopes, metric rules and supported query modes before execution. GA4 is the initial consumer. Contract is optional/additive and does not change other driver reducers. Release alongside corresponding tenant executor; do not assume merely declaring a policy enforces it on older tenants.
 - Shared driver foundation for orchestration and normalization helpers.
 - Metric profile templates and the aggregation strategy registry should remain the canonical shared abstraction for drivers and orchestrator-side index planning.
 - Cache strategy improvements should keep channel-config lookup resilient and cache key generation deterministic, including recursive normalization of nested payloads.

@@ -9,6 +9,14 @@ use PHPUnit\Framework\TestCase;
 
 final class AggregationProfileNormalizerTest extends TestCase
 {
+    public function testOptionalQueryContractSurvivesNormalization(): void
+    {
+        $contract = ['version' => 1, 'blocked_metrics' => ['cost'], 'rules' => ['rate' => ['reducer' => 'companion_weighted_average', 'weight_names' => ['sessions']]]];
+        $profile = AggregationProfileNormalizer::normalizeProfile('fixture', ['query_contract' => $contract]);
+        self::assertSame($contract, $profile['query_contract']);
+        self::assertSame([], AggregationProfileNormalizer::normalizeProfile('fixture', [])['query_contract']);
+    }
+
     public function testNormalizeProfileAppliesDefaultsAndAliases(): void
     {
         $profile = [
