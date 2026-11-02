@@ -25,6 +25,7 @@ final class CanonicalMetricDefinitionRegistry
         'reach' => [
             'label' => 'Reach',
             'category' => 'base',
+            'is_additive' => false,
         ],
         'frequency' => [
             'label' => 'Frequency',
@@ -49,6 +50,7 @@ final class CanonicalMetricDefinitionRegistry
         'new_users' => [
             'label' => 'New Users',
             'category' => 'engagement',
+            'is_additive' => false,
         ],
         'conversions' => [
             'label' => 'Conversions',
@@ -189,6 +191,7 @@ final class CanonicalMetricDefinitionRegistry
         'total_users' => [
             'label' => 'Total Users',
             'category' => 'engagement',
+            'is_additive' => false,
         ],
         'total_revenue' => [
             'label' => 'Total Revenue',
@@ -418,6 +421,19 @@ final class CanonicalMetricDefinitionRegistry
         }
 
         return self::$definitions[$canonical] + ['canonical_metric' => $canonical];
+    }
+
+    /**
+     * Check if a metric can be summed across time slices (additive) or represents distinct entities (non-additive).
+     */
+    public static function isAdditive(string $metric): bool
+    {
+        $canonical = self::normalize($metric);
+        if ($canonical === null) {
+            return true;
+        }
+
+        return (bool) (self::$definitions[$canonical]['is_additive'] ?? true);
     }
 
     /**

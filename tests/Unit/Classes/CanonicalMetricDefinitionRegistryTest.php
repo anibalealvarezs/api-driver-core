@@ -65,5 +65,25 @@ final class CanonicalMetricDefinitionRegistryTest extends TestCase
         $this->assertSame('engagements_total', CanonicalMetricDefinitionRegistry::normalize('actions_total'));
         $this->assertSame('engagements_total', CanonicalMetricDefinitionRegistry::normalize('custom_interactions_count'));
     }
+
+    public function testIsAdditiveCorrectlyIdentifiesAdditiveAndNonAdditiveMetrics(): void
+    {
+        // Non-additive canonical metrics and their aliases
+        $this->assertFalse(CanonicalMetricDefinitionRegistry::isAdditive('reach'));
+        $this->assertFalse(CanonicalMetricDefinitionRegistry::isAdditive('activeUsers'));
+        $this->assertFalse(CanonicalMetricDefinitionRegistry::isAdditive('active_users'));
+        $this->assertFalse(CanonicalMetricDefinitionRegistry::isAdditive('new_users'));
+        $this->assertFalse(CanonicalMetricDefinitionRegistry::isAdditive('newUsers'));
+        $this->assertFalse(CanonicalMetricDefinitionRegistry::isAdditive('total_users'));
+        $this->assertFalse(CanonicalMetricDefinitionRegistry::isAdditive('totalUsers'));
+
+        // Additive metrics
+        $this->assertTrue(CanonicalMetricDefinitionRegistry::isAdditive('impressions'));
+        $this->assertTrue(CanonicalMetricDefinitionRegistry::isAdditive('clicks'));
+        $this->assertTrue(CanonicalMetricDefinitionRegistry::isAdditive('spend'));
+        $this->assertTrue(CanonicalMetricDefinitionRegistry::isAdditive('sessions'));
+        $this->assertTrue(CanonicalMetricDefinitionRegistry::isAdditive('conversions'));
+        $this->assertTrue(CanonicalMetricDefinitionRegistry::isAdditive('unknown_custom_metric'));
+    }
 }
 
