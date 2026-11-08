@@ -160,6 +160,7 @@ final class CanonicalMetricDefinitionRegistry
         'follower_count' => [
             'label' => 'Follower Count',
             'category' => 'engagement',
+            'is_additive' => false,
         ],
         'fan_adds' => [
             'label' => 'Fan Adds',
@@ -300,6 +301,7 @@ final class CanonicalMetricDefinitionRegistry
         'post_video_avg_time_watched' => 'ig_reels_avg_watch_time',
         'page_fan_adds' => 'fan_adds',
         'page_fans' => 'follower_count',
+        'follower_total' => 'follower_count',
         'activeusers' => 'reach',
         'active_users' => 'reach',
         'newusers' => 'new_users',
