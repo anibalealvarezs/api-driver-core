@@ -29,7 +29,8 @@ final class CanonicalMetricDefinitionRegistry
         ],
         'frequency' => [
             'label' => 'Frequency',
-            'category' => 'base',
+            'category' => 'ratio',
+            'is_additive' => false,
         ],
         'ctr' => [
             'label' => 'Click-through Rate',
