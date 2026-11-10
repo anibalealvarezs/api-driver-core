@@ -298,6 +298,8 @@
                 'location'                    => null,
                 'state'                       => null,
                 'city'                        => null,
+                'currency'                    => null,
+                'sourceCurrency'              => null,
             ];
 
             return array_merge($template, $overrides);
