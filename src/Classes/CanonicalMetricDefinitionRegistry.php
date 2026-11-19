@@ -219,6 +219,18 @@ final class CanonicalMetricDefinitionRegistry
             'label' => 'Orders',
             'category' => 'ecommerce',
         ],
+        'gross_sales' => [
+            'label' => 'Gross Sales',
+            'category' => 'ecommerce',
+        ],
+        'net_sales' => [
+            'label' => 'Net Sales',
+            'category' => 'ecommerce',
+        ],
+        'total_sales' => [
+            'label' => 'Total Sales',
+            'category' => 'ecommerce',
+        ],
         'opens_standard' => [
             'label' => 'Standard Opens',
             'category' => 'engagement',
