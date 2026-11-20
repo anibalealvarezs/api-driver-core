@@ -223,8 +223,24 @@ final class CanonicalMetricDefinitionRegistry
             'label' => 'Gross Sales',
             'category' => 'ecommerce',
         ],
+        'discounts_total' => [
+            'label' => 'Discounts',
+            'category' => 'ecommerce',
+        ],
+        'returns_total' => [
+            'label' => 'Returns / Refunds',
+            'category' => 'ecommerce',
+        ],
         'net_sales' => [
             'label' => 'Net Sales',
+            'category' => 'ecommerce',
+        ],
+        'taxes_total' => [
+            'label' => 'Taxes',
+            'category' => 'ecommerce',
+        ],
+        'shipping_total' => [
+            'label' => 'Shipping',
             'category' => 'ecommerce',
         ],
         'total_sales' => [
